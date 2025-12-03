@@ -114,7 +114,6 @@ OR
 ## **3. Start the application**
 
 - Both the backend and the frontend can be started with the `npm start` command.
-- The current version of the game is available at [https://miserere.aporkolab.com/].
 
 ## **4. Description of roles**
 
@@ -237,7 +236,6 @@ VAGY
 ## **3. Az alkalmazás indítása**
 
 - Mind a backend, mind a frontend az `npm start` paranccsal indítható.
-- A játék aktuális verziója a [https://miserere.aporkolab.com/] címen elérhető.
 
 ## **4. A szerepkörök leírása**
 
