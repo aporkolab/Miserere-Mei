@@ -124,7 +124,7 @@ OR
 
 ## **5. Contact information**
 
-Dr. Ádám Porkoláb (adam@porkolab.digital)
+Dr. Ádám Porkoláb (ap@aporkolab.com)
 
 ## **6. Technologies used**
 
@@ -249,7 +249,7 @@ VAGY
 ##### Webfejlesztés, design: Dr. Porkoláb Ádám
 
 - **A weboldallal és általános kérdésekkel, észrevételekkel kapcsolatban:**
-  Dr. Porkoláb Ádám (adam@porkolab.digital)
+  Dr. Porkoláb Ádám (ap@aporkolab.com)
 
 ## **6. Felhasznált technológiák**
 
