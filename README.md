@@ -3,7 +3,6 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/APorkolab/Miserere-Mei/ci.yml?branch=main)](../../actions)
 [![License](https://img.shields.io/badge/license-MIT-informational.svg)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/APorkolab/Miserere-Mei.svg)](../../issues)
-[![Live Demo](https://img.shields.io/badge/live-miserere.porkolab.hu-success)](https://miserere.porkolab.hu/)
 
 
 # Documentation
@@ -115,7 +114,7 @@ OR
 ## **3. Start the application**
 
 - Both the backend and the frontend can be started with the `npm start` command.
-- The current version of the game is available at [https://miserere.porkolab.hu/].
+- The current version of the game is available at [https://miserere.aporkolab.com/].
 
 ## **4. Description of roles**
 
@@ -238,7 +237,7 @@ VAGY
 ## **3. Az alkalmazás indítása**
 
 - Mind a backend, mind a frontend az `npm start` paranccsal indítható.
-- A játék aktuális verziója a [https://miserere.porkolab.hu/] címen elérhető.
+- A játék aktuális verziója a [https://miserere.aporkolab.com/] címen elérhető.
 
 ## **4. A szerepkörök leírása**
 

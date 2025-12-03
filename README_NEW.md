@@ -6,7 +6,6 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=miserere-mei&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=miserere-mei)
 [![License](https://img.shields.io/badge/license-CC--BY--NC--ND--4.0-informational.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-supported-blue.svg)](https://hub.docker.com)
-[![Live Demo](https://img.shields.io/badge/live-miserere.porkolab.hu-success)](https://miserere.porkolab.hu/)
 
 > 🎮 A modern text-based adventure game built with enterprise-grade
 > architecture, featuring Angular frontend and Node.js backend with
@@ -507,7 +506,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International License**.
 
 **Dr. Ádám Porkoláb**
 
-- 🌐 Website: [porkolab.hu](https://porkolab.hu)
+- 🌐 Website: [aporkolab.com](https://aporkolab.com)
 - 📧 Email: [adam@porkolab.digital](mailto:adam@porkolab.digital)
 - 🐙 GitHub: [@APorkolab](https://github.com/APorkolab)
 - 💼 LinkedIn: [ádám-dr-porkoláb](https://linkedin.com/in/ádám-dr-porkoláb)
@@ -531,7 +530,6 @@ engineering_
 
 **🎮 Ready to embark on the journey? Start your adventure now!**
 
-[**🚀 Live Demo**](https://miserere.porkolab.hu/) |
 [**📖 Documentation**](docs/) |
 [**🐛 Report Bug**](https://github.com/APorkolab/Miserere-Mei/issues)
 

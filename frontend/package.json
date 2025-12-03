@@ -20,7 +20,7 @@
     "analyze": "ng build --configuration=production --stats-json && npx webpack-bundle-analyzer dist/miserere-mei/stats.json"
   },
   "private": true,
-  "homepage": "https://miserere.porkolab.hu",
+  "homepage": "https://miserere.aporkolab.com",
   "dependencies": {
     "@angular/animations": "^20.2.1",
     "@angular/cli": "^20.2.0",
