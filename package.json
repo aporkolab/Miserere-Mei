@@ -48,7 +48,7 @@
     "concurrently": "^8.2.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6",
-    "semantic-release": "^24.2.8",
+    "semantic-release": "^25.0.3",
     "stylelint": "^16.24.0",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard-scss": "^16.0.0",
@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
-    "ngx-bootstrap": "^9.0.0"
+    "ngx-bootstrap": "^21.0.1"
   },
   "engines": {
     "node": ">=20.0.0",
