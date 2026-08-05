@@ -192,7 +192,7 @@ installation required.
 
 For questions about releases or upgrade issues:
 
-- 📧 **Email**: [adam@porkolab.digital](mailto:adam@porkolab.digital)
+- **E-mail**: `ap kukac aporkolab pont com`
 - 🐛 **Issues**:
   [GitHub Issues](https://github.com/APorkolab/Miserere-Mei/issues)
 - 💬 **Discussions**:

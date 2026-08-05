@@ -11,12 +11,11 @@ Mindig a legfrissebb `1.7.x` kiadást használd.
 
 ## Sérülékenység bejelentése
 
-Ne nyiss nyilvános issue-t. Küldd a leírást az
-[adam@porkolab.digital](mailto:adam@porkolab.digital) címre `SECURITY:`
-tárggyal. Add meg az érintett verziót, hatást, reprodukciót és – ha
-biztonságosan megosztható – minimális proof of conceptet. Cél: 48 órán belüli
-visszaigazolás, kritikus hibánál azonnali triage, összehangolt publikálás a
-javítás kiadása után.
+Ne nyiss nyilvános issue-t. Küldd a leírást az `ap kukac aporkolab pont com`
+címre `SECURITY:` tárggyal. Add meg az érintett verziót, hatást, reprodukciót és
+– ha biztonságosan megosztható – minimális proof of conceptet. Cél: 48 órán
+belüli visszaigazolás, kritikus hibánál azonnali triage, összehangolt publikálás
+a javítás kiadása után.
 
 ## v1.7 védelmi modell
 

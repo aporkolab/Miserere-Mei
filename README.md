@@ -292,8 +292,7 @@ A részletes kiadási lista a [CHANGELOG.md](CHANGELOG.md) fájlban található.
 ## Alkotók, források és kreditek
 
 **Írta, tervezte és fejlesztette:** Dr. Porkoláb Ádám<br> **Stúdió:** Hootie in
-Bootee Studio<br> **Kapcsolat:**
-[adam@porkolab.digital](mailto:adam@porkolab.digital)
+Bootee Studio<br> **Kapcsolat:** `ap kukac aporkolab pont com`
 
 Felhasznált vagy inspirációként szolgáló eszközök és források:
 
