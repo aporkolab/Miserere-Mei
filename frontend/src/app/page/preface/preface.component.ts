@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-    selector: 'app-preface',
-    templateUrl: './preface.component.html',
-    styleUrls: ['./preface.component.scss'],
-    standalone: false
+  selector: 'app-preface',
+  templateUrl: './preface.component.html',
+  styleUrls: ['./preface.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class PrefaceComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

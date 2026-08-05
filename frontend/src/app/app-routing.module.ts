@@ -46,14 +46,6 @@ const routes: Routes = [
     },
   },
   {
-    path: 'users/select/`0`',
-    component: UsersEditorComponent,
-    canActivate: [AuthGuardService, RoleGuardService],
-    data: {
-      expectedRole: 3,
-    },
-  },
-  {
     path: 'allplace',
     component: AllPlaceViewerComponent,
     canActivate: [AuthGuardService, RoleGuardService],
@@ -63,14 +55,6 @@ const routes: Routes = [
   },
   {
     path: 'allplace/select/:id',
-    component: AllPlaceEditorComponent,
-    canActivate: [AuthGuardService, RoleGuardService],
-    data: {
-      expectedRole: 3,
-    },
-  },
-  {
-    path: 'allplace/select/`0`',
     component: AllPlaceEditorComponent,
     canActivate: [AuthGuardService, RoleGuardService],
     data: {

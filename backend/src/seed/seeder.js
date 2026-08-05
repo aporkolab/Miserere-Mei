@@ -11,12 +11,10 @@ const chunkArray = (array, chunkSize) => {
   return chunks;
 };
 
-const seedDatabase = async () => {
+const seedDatabase = async ({ force = false } = {}) => {
   try {
     // Synchronize all models
-    await sequelize.sync({
-      force: true,
-    });
+    await sequelize.sync({ force });
     console.log('All tables have been created or updated.');
 
     const placesPath = path.resolve(__dirname, '../seed/places.json');
@@ -50,6 +48,7 @@ const seedDatabase = async () => {
     console.log('Database has been seeded successfully!');
   } catch (error) {
     console.error('Error seeding the database: ', error);
+    throw error;
   }
 };
 

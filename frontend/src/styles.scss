@@ -1,1 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
+.app-toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1100;
+  display: grid;
+  gap: 0.25rem;
+  width: min(24rem, calc(100vw - 2rem));
+  padding: 1rem 1.25rem;
+  color: #fff;
+  background: #344767;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 25%);
+  opacity: 0;
+  transform: translateY(-0.75rem);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.app-toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.app-toast--success {
+  background: #198754;
+}
+.app-toast--error {
+  background: #dc3545;
+}
+.app-toast--warning {
+  color: #212529;
+  background: #ffc107;
+}
+.app-toast--info {
+  background: #0d6efd;
+}

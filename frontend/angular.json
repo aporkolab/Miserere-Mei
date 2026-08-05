@@ -18,39 +18,32 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/miserere-mei",
-            "allowedCommonJsDependencies": [
-              "core-js/es/array/from",
-              "core-js/es/map",
-              "core-js/es/object/assign",
-              "core-js/es/set",
-              "core-js/es/weak-map"
-            ],
+            "outputPath": {
+              "base": "dist/miserere-mei",
+              "browser": ""
+            },
+            "allowedCommonJsDependencies": ["core-js/es/array/from", "core-js/es/map", "core-js/es/object/assign", "core-js/es/set", "core-js/es/weak-map"],
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": [
-              "src/styles.scss",
-              "src/assets/css/nucleo-icons.css",
-              "src/assets/css/nucleo-svg.css",
-              "src/assets/css/soft-ui-dashboard.css",
-              "node_modules/ngx-toastr/toastr.css"
-            ],
-            "scripts": [
-              "./node_modules/jquery/dist/jquery.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.js",
-
-              "./src/assets/js/soft-ui-dashboard.js",
-              "./src/assets/js/plugins/buttons.js"
-            ]
+            "styles": ["src/styles.scss", "src/assets/css/nucleo-icons.css", "src/assets/css/nucleo-svg.css", "src/assets/css/soft-ui-dashboard.css"],
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": false
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -72,9 +65,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -86,7 +77,7 @@
           "options": {
             "proxyConfig": "proxy.conf.json"
           },
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "MiserereMei:build:production"
@@ -98,16 +89,16 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "MiserereMei:build"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
