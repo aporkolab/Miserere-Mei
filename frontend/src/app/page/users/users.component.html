@@ -1,2 +1,9 @@
-<ngx-data-table *ngIf="list$ |async as list" [columns]="columns" [entity]="entity" [list]="list"
-	(selectOne)="onSelectOne($event)" (deleteOne)="onDeleteOne($event)"></ngx-data-table>
+@if (list$ | async; as list) {
+  <ngx-data-table
+    [columns]="columns"
+    [entity]="entity"
+    [list]="list"
+    (selectOne)="onSelectOne($event)"
+    (deleteOne)="onDeleteOne($event)"
+  ></ngx-data-table>
+}

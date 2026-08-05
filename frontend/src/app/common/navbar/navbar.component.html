@@ -1,61 +1,76 @@
 <nav class="navbar navbar-expand-lg bg-light">
-	<div class="container-fluid">
-		<a class="navbar-brand" routerLink="/">Miserere Mei V.1.0.0</a>
-		<button type="button" class="btn btn-rounded" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-			aria-controls="navbarSupportedContent" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle navigation"
-			(click)="isCollapsed = !isCollapsed" aria-controls="collapseExample">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<li class="nav-item">
-					<a routerLink="place/GameBeginning" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-button-power me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline ">Játék elindítása</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a routerLink="/allplace" *ngIf="(auth.user$ | async)?.role === 3"
-						class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-istanbul me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline ">All place</span>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a routerLink="/users" *ngIf="(auth.user$ | async)?.role === 3" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-user-run me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline ">Users</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a routerLink="/preface" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-collection me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline ">Előszó</span>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a routerLink="/map" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-album-2 me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline">Térkép</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a routerLink="/contact" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-email-83 me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline">Kapcsolat</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a *ngIf="auth.user$ | async" routerLink="/login" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-circle-08 me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline">Kijelentkezés</span>
-					</a>
-					<a *ngIf="!(auth.user$ | async)" routerLink="/login" class="nav-link text-body font-weight-bold ">
-						<i class="ni ni-single-02 me-sm-1" aria-hidden="true"></i>
-						<span class="d-sm-inline">Bejelentkezés</span>
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">Miserere Mei V.1.0.0</a>
+    <button
+      type="button"
+      class="btn btn-rounded"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-label="Toggle navigation"
+      (click)="isCollapsed = !isCollapsed"
+      aria-controls="collapseExample"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a routerLink="place/GameBeginning" class="nav-link text-body font-weight-bold">
+            <i class="ni ni-button-power me-sm-1" aria-hidden="true"></i>
+            <span class="d-sm-inline">Játék elindítása</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          @if ((auth.user$ | async)?.role === 3) {
+            <a routerLink="/allplace" class="nav-link text-body font-weight-bold">
+              <i class="ni ni-istanbul me-sm-1" aria-hidden="true"></i>
+              <span class="d-sm-inline">All place</span>
+            </a>
+          }
+        </li>
+        <li class="nav-item">
+          @if ((auth.user$ | async)?.role === 3) {
+            <a routerLink="/users" class="nav-link text-body font-weight-bold">
+              <i class="ni ni-user-run me-sm-1" aria-hidden="true"></i>
+              <span class="d-sm-inline">Users</span>
+            </a>
+          }
+        </li>
+        <li class="nav-item">
+          <a routerLink="/preface" class="nav-link text-body font-weight-bold">
+            <i class="ni ni-collection me-sm-1" aria-hidden="true"></i>
+            <span class="d-sm-inline">Előszó</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/map" class="nav-link text-body font-weight-bold">
+            <i class="ni ni-album-2 me-sm-1" aria-hidden="true"></i>
+            <span class="d-sm-inline">Térkép</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/contact" class="nav-link text-body font-weight-bold">
+            <i class="ni ni-email-83 me-sm-1" aria-hidden="true"></i>
+            <span class="d-sm-inline">Kapcsolat</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          @if (auth.user$ | async) {
+            <a routerLink="/login" class="nav-link text-body font-weight-bold">
+              <i class="ni ni-circle-08 me-sm-1" aria-hidden="true"></i>
+              <span class="d-sm-inline">Kijelentkezés</span>
+            </a>
+          }
+          @if (!(auth.user$ | async)) {
+            <a routerLink="/login" class="nav-link text-body font-weight-bold">
+              <i class="ni ni-single-02 me-sm-1" aria-hidden="true"></i>
+              <span class="d-sm-inline">Bejelentkezés</span>
+            </a>
+          }
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

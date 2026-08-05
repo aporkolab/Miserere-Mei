@@ -10,7 +10,6 @@ import { PlayerService } from './player.service';
 @Injectable({
   providedIn: 'root',
 })
-
 export class BattleService {
   private inBattle = new BehaviorSubject<boolean>(false);
   currentBattleState = this.inBattle.asObservable();
@@ -51,9 +50,7 @@ export class BattleService {
 
   itemName: string = '';
 
-  constructor(private message: NotificationService) {
-
-  }
+  constructor(private message: NotificationService) {}
 
   changeMessage(message: string) {
     this.monsterName.next(message);
@@ -101,11 +98,11 @@ export class BattleService {
     this.playerInventory.next(data);
   }
 
-  //Inventory functions 
+  //Inventory functions
 
   addItem(dataObj: string) {
     if (dataObj.includes('(delete)')) {
-      const deleteArray = dataObj.split(" ");
+      const deleteArray = dataObj.split(' ');
       this.deleteItem(deleteArray[0]);
     } else {
       const currentValue = this.playerInventory.value;
@@ -113,7 +110,7 @@ export class BattleService {
         name: dataObj,
         numberOfItems: 0,
         description: 'Cantus még nem tudja, hogy mire lesz jó a tárgy...',
-      }
+      };
       if (currentValue.find(item => item.name === dataObj)) {
         let item = currentValue.find(item => item.name === dataObj);
         item.numberOfItems++;
@@ -144,25 +141,31 @@ export class BattleService {
   inventoryUsing(itemName: string) {
     this.itemName = itemName;
     switch (itemName) {
-      case "Gyógyszer":
+      case 'Gyógyszer':
         if (this.playerHealth.value >= 80) {
-          this.message.showInfo('Cantus kirobbanó formában van, nincs szüksége gyógyszerre.', 'Miserere Mei v.1.0.0');
+          this.message.showInfo(
+            'Cantus kirobbanó formában van, nincs szüksége gyógyszerre.',
+            'Miserere Mei v.1.0.0'
+          );
           break;
         } else {
           this.consumeItem(itemName);
           this.changePlayerHealth(this.playerHealth.value + 20);
         }
         break;
-      case "Lőszer":
+      case 'Lőszer':
         if (this.playerBulletsNumber.value >= 15) {
-          this.message.showInfo('Cantus fegyvere tele van. Nem szükséges újratölteni.', 'Miserere Mei v.1.0.0');
+          this.message.showInfo(
+            'Cantus fegyvere tele van. Nem szükséges újratölteni.',
+            'Miserere Mei v.1.0.0'
+          );
           break;
         } else {
           this.consumeItem(itemName);
           this.changePlayerBulletsNumber(this.playerBulletsNumber.value + 10);
           break;
         }
-      case "AK-47":
+      case 'AK-47':
         if (this.weaponName.value != 'AK-47 gépkarabély') {
           this.changePlayerWeapon('AK-47 gépkarabély');
           this.changePlayerMinDamage(5);
@@ -181,9 +184,10 @@ export class BattleService {
   }
 
   consumeItem(itemName: any) {
-    let item = this.playerInventory.value.find(item => item.name === itemName)
+    let item = this.playerInventory.value.find(item => item.name === itemName);
     if (item == null) {
-      this.message.showError('Nincs ilyen tárgy!', 'Miserere Mei v.1.0.0')
+      this.message.showError('Nincs ilyen tárgy!', 'Miserere Mei v.1.0.0');
+      return;
     }
     if (item.numberOfItems <= 1) {
       const index = this.playerInventory.value.indexOf(item);
@@ -193,6 +197,7 @@ export class BattleService {
       }
     }
     item.numberOfItems -= 1;
-    this.message.showInfo(item.name + ' felhasználva.', 'Miserere Mei v.1.0.0')
+    this.playerInventory.next([...this.playerInventory.value]);
+    this.message.showInfo(item.name + ' felhasználva.', 'Miserere Mei v.1.0.0');
   }
 }

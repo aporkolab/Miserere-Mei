@@ -1,5 +1,5 @@
 # Multi-stage build for production-ready frontend
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 
 # Install dumb-init for proper signal handling
 RUN apk add --no-cache dumb-init
@@ -12,7 +12,7 @@ COPY package*.json ./
 
 # Install dependencies stage
 FROM base AS deps
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Development dependencies stage
 FROM base AS dev-deps
@@ -28,7 +28,7 @@ FROM dev-deps AS build
 COPY . .
 
 # Build the Angular application for production
-RUN npm run build -- --configuration=production --output-path=dist
+RUN npm run build:prod
 
 # Production stage using nginx
 FROM nginx:1.25-alpine AS production
@@ -44,7 +44,7 @@ RUN addgroup -g 1001 -S nginx && \
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built application from build stage
-COPY --from=build --chown=nginxuser:nginx /usr/src/app/dist /usr/share/nginx/html
+COPY --from=build --chown=nginxuser:nginx /usr/src/app/dist/miserere-mei/ /usr/share/nginx/html/
 
 # Switch to non-root user
 USER nginxuser

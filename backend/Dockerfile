@@ -1,5 +1,5 @@
 # Multi-stage build for production-ready backend
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 
 # Install dumb-init for proper signal handling
 RUN apk add --no-cache dumb-init
@@ -12,19 +12,13 @@ COPY package*.json ./
 
 # Install dependencies
 FROM base AS deps
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Development stage
 FROM base AS dev
 RUN npm ci
 COPY . .
 CMD ["dumb-init", "npm", "run", "dev"]
-
-# Build stage
-FROM base AS build
-RUN npm ci
-COPY . .
-RUN npm run build
 
 # Production stage
 FROM base AS production
@@ -37,9 +31,8 @@ RUN addgroup -g 1001 -S nodejs && \
 COPY --from=deps --chown=nodeuser:nodejs /usr/src/app/node_modules ./node_modules
 
 # Copy built application
-COPY --from=build --chown=nodeuser:nodejs /usr/src/app/dist ./dist
-COPY --from=build --chown=nodeuser:nodejs /usr/src/app/package*.json ./
-COPY --from=build --chown=nodeuser:nodejs /usr/src/app/src ./src
+COPY --chown=nodeuser:nodejs src ./src
+COPY --chown=nodeuser:nodejs healthcheck.js ./healthcheck.js
 
 # Switch to non-root user
 USER nodeuser

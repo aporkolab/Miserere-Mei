@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import Scrollbar from 'smooth-scrollbar';
 import { ConfigService, IMenuItem } from './service/config.service';
 
@@ -6,6 +6,7 @@ import { ConfigService, IMenuItem } from './service/config.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AppComponent {

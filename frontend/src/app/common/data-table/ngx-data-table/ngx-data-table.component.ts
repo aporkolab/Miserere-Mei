@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -10,10 +17,11 @@ export interface INgxTableColumn {
 }
 
 @Component({
-    selector: 'ngx-data-table',
-    templateUrl: './ngx-data-table.component.html',
-    styleUrls: ['./ngx-data-table.component.scss'],
-    standalone: false
+  selector: 'ngx-data-table',
+  templateUrl: './ngx-data-table.component.html',
+  styleUrls: ['./ngx-data-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class NgxDataTableComponent<T extends Record<string, any>> implements OnInit {
   @Input() list: T[] = [];
@@ -47,7 +55,7 @@ export class NgxDataTableComponent<T extends Record<string, any>> implements OnI
     private notifyService: NotificationService,
     public auth: AuthService,
     public router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.auth.user$.subscribe(user => {

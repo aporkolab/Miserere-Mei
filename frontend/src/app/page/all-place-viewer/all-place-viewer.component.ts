@@ -1,6 +1,6 @@
 import { AllPlaceService } from './../../service/allplace.service';
 import { PlaceService } from 'src/app/service/place.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AllPlace } from 'src/app/model/allplace';
@@ -9,10 +9,11 @@ import { NotificationService } from 'src/app/service/notification.service';
 import { Place } from 'src/app/model/place';
 
 @Component({
-    selector: 'app-all-place-viewer',
-    templateUrl: './all-place-viewer.component.html',
-    styleUrls: ['./all-place-viewer.component.scss'],
-    standalone: false
+  selector: 'app-all-place-viewer',
+  templateUrl: './all-place-viewer.component.html',
+  styleUrls: ['./all-place-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class AllPlaceViewerComponent implements OnInit {
   columns = this.config.placesTableColumns;
@@ -25,27 +26,20 @@ export class AllPlaceViewerComponent implements OnInit {
     private allPlaceService: AllPlaceService,
     private router: Router,
     private notifyService: NotificationService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   loadPlaces(): void {
     this.list$ = this.allPlaceService.getAll();
   }
 
   showSuccessDelete() {
-    this.notifyService.showSuccess(
-      `${this.entity} deleted successfully!`,
-      'Miserere Mei v.1.0.0'
-    );
+    this.notifyService.showSuccess(`${this.entity} deleted successfully!`, 'Miserere Mei v.1.0.0');
   }
 
   showError(err: string) {
-    this.notifyService.showError(
-      'Something went wrong. Details: ' + err,
-      'Miserere Mei v.1.0.0'
-    );
+    this.notifyService.showError('Something went wrong. Details: ' + err, 'Miserere Mei v.1.0.0');
   }
 
   onSelectOne(allPlace: AllPlace): void {
@@ -55,7 +49,7 @@ export class AllPlaceViewerComponent implements OnInit {
   onDeleteOne(allPlace: AllPlace): void {
     this.placeService.delete(allPlace).subscribe({
       next: () => this.loadPlaces(),
-      error: (err) => this.showError(err),
+      error: err => this.showError(err),
       complete: () => this.showSuccessDelete(),
     });
   }

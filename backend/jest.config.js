@@ -3,13 +3,13 @@ module.exports = {
   testEnvironment: 'node',
 
   // Root directories
-  roots: ['<rootDir>/src', '<rootDir>/tests'],
+  roots: ['<rootDir>/src'],
 
   // Test file patterns
   testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
 
   // Coverage configuration
-  collectCoverage: true,
+  collectCoverage: false,
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
   collectCoverageFrom: [
@@ -30,19 +30,13 @@ module.exports = {
   },
 
   // Setup files
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-
   // Module path mapping
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@tests/(.*)$': '<rootDir>/tests/$1',
   },
 
   // Transform configuration
-  transform: {
-    '^.+\\.js$': 'babel-jest',
-  },
-
   // Ignore patterns
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 

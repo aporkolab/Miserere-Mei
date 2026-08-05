@@ -1,241 +1,355 @@
 <div class="row">
-	<div class="col-12 d-flex justify-content-center text-center">
-		<div class="card">
-			<div class="card-header card-header-primary">
-				<h4 class="card-title" *ngIf="allplace$ | async">Edit the data of the place</h4>
-				<h4 class="card-title" *ngIf="!(allplace$ | async)">Add a new place</h4>
-			</div>
-			<div class="card-body">
-				<form #placeForm="ngForm">
-					<input type="hidden" name="id" [(ngModel)]="allplace._id">
+  <div class="col-12 d-flex justify-content-center text-center">
+    <div class="card">
+      <div class="card-header card-header-primary">
+        @if (allplace$ | async) {
+          <h4 class="card-title">Edit the data of the place</h4>
+        }
+        @if (!(allplace$ | async)) {
+          <h4 class="card-title">Add a new place</h4>
+        }
+      </div>
+      <div class="card-body">
+        <form #placeForm="ngForm">
+          <input type="hidden" name="id" [(ngModel)]="allplace._id" />
 
-					<h3 class="h5 text-secondary">Location *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="location" [(ngModel)]="allplace.location" required
-									pattern="^[0-9a-zA-Z !@\#\$%\^&\*\(\)\-\=\_\+]+$">
-							</div>
-							<div *ngIf="placeForm.controls['location'].invalid && placeForm.controls['location'].touched"
-								class="alert alert-danger" role="alert">
-								The location name must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Location *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="location"
+                  [(ngModel)]="allplace.location"
+                  required
+                  pattern="^[0-9a-zA-Z !@\#\$%\^&\*\(\)\-\=\_\+]+$"
+                />
+              </div>
+              @if (placeForm.controls['location']?.invalid && placeForm.controls['location']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The location name must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">Narration zone text *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="narrationZoneText"
-									[(ngModel)]="allplace.narrationZoneText" required>
-							</div>
-							<div
-								*ngIf="placeForm.controls['narrationZoneText'].invalid && placeForm.controls['narrationZoneText'].touched"
-								class="alert alert-danger" role="alert">
-								The narration zone text must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Narration zone text *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="narrationZoneText"
+                  [(ngModel)]="allplace.narrationZoneText"
+                  required
+                />
+              </div>
+              @if (
+                placeForm.controls['narrationZoneText']?.invalid && placeForm.controls['narrationZoneText']?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  The narration zone text must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">Opponent Name</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="opponentName" [(ngModel)]="allplace.opponentName"
-									pattern="^[0-9a-zA-Z !@\#\$%\^&\*\(\)\-\=\_\+]+$">
-							</div>
-							<div *ngIf="placeForm.controls['opponentName'].invalid && placeForm.controls['opponentName'].touched"
-								class="alert alert-danger" role="alert">
-								The opponent name must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Opponent Name</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="opponentName"
+                  [(ngModel)]="allplace.opponentName"
+                  pattern="^[0-9a-zA-Z !@\#\$%\^&\*\(\)\-\=\_\+]+$"
+                />
+              </div>
+              @if (placeForm.controls['opponentName']?.invalid && placeForm.controls['opponentName']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The opponent name must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">Opponent Health</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="number" class="form-control" name="opponenthealth" [(ngModel)]="allplace.opponenthealth"
-									min="0" max="10000">
-							</div>
-							<div *ngIf="placeForm.controls['opponenthealth'].invalid && placeForm.controls['opponenthealth'].touched"
-								class="alert alert-danger" role="alert">
-								The opponent health must be a valid integer within the allowed range.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Opponent Health</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="opponenthealth"
+                  [(ngModel)]="allplace.opponenthealth"
+                  min="0"
+                  max="10000"
+                />
+              </div>
+              @if (placeForm.controls['opponenthealth']?.invalid && placeForm.controls['opponenthealth']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The opponent health must be a valid integer within the allowed range.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">Opponent Minimum Damage</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="number" class="form-control" name="opponentMinDamage"
-									[(ngModel)]="allplace.opponentMinDamage" min="0" max="1000000000">
-							</div>
-							<div
-								*ngIf="placeForm.controls['opponentMinDamage'].invalid && placeForm.controls['opponentMinDamage'].touched"
-								class="alert alert-danger" role="alert">
-								The opponent minimum damage must be a valid integer within the allowed range.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Opponent Minimum Damage</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="opponentMinDamage"
+                  [(ngModel)]="allplace.opponentMinDamage"
+                  min="0"
+                  max="1000000000"
+                />
+              </div>
+              @if (
+                placeForm.controls['opponentMinDamage']?.invalid && placeForm.controls['opponentMinDamage']?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  The opponent minimum damage must be a valid integer within the allowed range.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">Opponent Maximum Damage</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="number" class="form-control" name="opponentMaxDamage"
-									[(ngModel)]="allplace.opponentMaxDamage" min="0" max="1000000000">
-							</div>
-							<div
-								*ngIf="placeForm.controls['opponentMaxDamage'].invalid && placeForm.controls['opponentMaxDamage'].touched"
-								class="alert alert-danger" role="alert">
-								The opponent maximum damage must be a valid integer within the allowed range.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Opponent Maximum Damage</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="opponentMaxDamage"
+                  [(ngModel)]="allplace.opponentMaxDamage"
+                  min="0"
+                  max="1000000000"
+                />
+              </div>
+              @if (
+                placeForm.controls['opponentMaxDamage']?.invalid && placeForm.controls['opponentMaxDamage']?.touched
+              ) {
+                <div class="alert alert-danger" role="alert">
+                  The opponent maximum damage must be a valid integer within the allowed range.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">1st decision *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="decision1" [(ngModel)]="allplace.decision1" required
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div *ngIf="placeForm.controls['decision1'].invalid && placeForm.controls['decision1'].touched"
-								class="alert alert-danger" role="alert">
-								The first decision must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">1st decision *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="decision1"
+                  [(ngModel)]="allplace.decision1"
+                  required
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['decision1']?.invalid && placeForm.controls['decision1']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The first decision must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">2nd decision</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="decision2" [(ngModel)]="allplace.decision2"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div *ngIf="placeForm.controls['decision2'].invalid && placeForm.controls['decision2'].touched"
-								class="alert alert-danger" role="alert">
-								The second decision must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">2nd decision</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="decision2"
+                  [(ngModel)]="allplace.decision2"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['decision2']?.invalid && placeForm.controls['decision2']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The second decision must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">3rd decision</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="decision3" [(ngModel)]="allplace.decision3"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div *ngIf="placeForm.controls['decision3'].invalid && placeForm.controls['decision3'].touched"
-								class="alert alert-danger" role="alert">
-								The third decision must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">3rd decision</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="decision3"
+                  [(ngModel)]="allplace.decision3"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['decision3']?.invalid && placeForm.controls['decision3']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The third decision must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">4th decision</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="decision4" [(ngModel)]="allplace.decision4"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div *ngIf="placeForm.controls['decision4'].invalid && placeForm.controls['decision4'].touched"
-								class="alert alert-danger" role="alert">
-								The fourth decision must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">4th decision</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="decision4"
+                  [(ngModel)]="allplace.decision4"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['decision4']?.invalid && placeForm.controls['decision4']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The fourth decision must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">1st further location *</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="furtherLocation1" [(ngModel)]="allplace.furtherLocation1"
-									required pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div
-								*ngIf="placeForm.controls['furtherLocation1'].invalid && placeForm.controls['furtherLocation1'].touched"
-								class="alert alert-danger" role="alert">
-								The first further location must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">1st further location *</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="furtherLocation1"
+                  [(ngModel)]="allplace.furtherLocation1"
+                  required
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['furtherLocation1']?.invalid && placeForm.controls['furtherLocation1']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The first further location must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">2nd further location</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="furtherLocation2" [(ngModel)]="allplace.furtherLocation2"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div
-								*ngIf="placeForm.controls['furtherLocation2'].invalid && placeForm.controls['furtherLocation2'].touched"
-								class="alert alert-danger" role="alert">
-								The second further location must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">2nd further location</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="furtherLocation2"
+                  [(ngModel)]="allplace.furtherLocation2"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['furtherLocation2']?.invalid && placeForm.controls['furtherLocation2']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The second further location must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">3rd further location</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="furtherLocation3" [(ngModel)]="allplace.furtherLocation3"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div
-								*ngIf="placeForm.controls['furtherLocation3'].invalid && placeForm.controls['furtherLocation3'].touched"
-								class="alert alert-danger" role="alert">
-								The third further location must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">3rd further location</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="furtherLocation3"
+                  [(ngModel)]="allplace.furtherLocation3"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['furtherLocation3']?.invalid && placeForm.controls['furtherLocation3']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The third further location must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">4th further location</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="furtherLocation4" [(ngModel)]="allplace.furtherLocation4"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div
-								*ngIf="placeForm.controls['furtherLocation4'].invalid && placeForm.controls['furtherLocation4'].touched"
-								class="alert alert-danger" role="alert">
-								The fourth further location must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">4th further location</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="furtherLocation4"
+                  [(ngModel)]="allplace.furtherLocation4"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['furtherLocation4']?.invalid && placeForm.controls['furtherLocation4']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The fourth further location must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<h3 class="h5 text-secondary">Object found</h3>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" name="objectFound" [(ngModel)]="allplace.objectFound"
-									pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$">
-							</div>
-							<div *ngIf="placeForm.controls['objectFound'].invalid && placeForm.controls['objectFound'].touched"
-								class="alert alert-danger" role="alert">
-								The object found must contain only letters, numbers, and allowed special characters.
-							</div>
-						</div>
-					</div>
+          <h3 class="h5 text-secondary">Object found</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="objectFound"
+                  [(ngModel)]="allplace.objectFound"
+                  pattern="^[a-zA-Z \-\.,!()'\d]{3,60}$"
+                />
+              </div>
+              @if (placeForm.controls['objectFound']?.invalid && placeForm.controls['objectFound']?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  The object found must contain only letters, numbers, and allowed special characters.
+                </div>
+              }
+            </div>
+          </div>
 
-					<button *ngIf="allplace$ | async" (click)="onUpdate(allplace)" [disabled]="placeForm.invalid" type="submit"
-						class="btn btn-primary pull-right me-md-3">Update data of place</button>
-					<button *ngIf="!(allplace$ | async)" (click)="onCreate(allplace)" [disabled]="placeForm.invalid" type="submit"
-						class="btn btn-primary pull-right me-md-3">Create data of place</button>
-					<button routerLink="/allplace" type="button" class="btn btn-danger pull-left">Cancel edit</button>
-					<div class="clearfix"></div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4">
-	</div>
+          @if (allplace$ | async) {
+            <button
+              (click)="onUpdate(allplace)"
+              [disabled]="placeForm.invalid"
+              type="submit"
+              class="btn btn-primary pull-right me-md-3"
+            >
+              Update data of place
+            </button>
+          }
+          @if (!(allplace$ | async)) {
+            <button
+              (click)="onCreate(allplace)"
+              [disabled]="placeForm.invalid"
+              type="submit"
+              class="btn btn-primary pull-right me-md-3"
+            >
+              Create data of place
+            </button>
+          }
+          <button routerLink="/allplace" type="button" class="btn btn-danger pull-left">Cancel edit</button>
+          <div class="clearfix"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
 </div>

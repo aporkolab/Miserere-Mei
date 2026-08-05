@@ -9,7 +9,7 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: 3306
+  port: 3306,
 };
 
 async function checkDatabaseConnection() {
@@ -18,8 +18,14 @@ async function checkDatabaseConnection() {
     try {
       const connection = await mysql.createConnection(dbConfig);
       await connection.end();
-      logger.info('Database connection established. Seeding database...');
-      await seedDatabase();
+      logger.info('Database connection established.');
+      if (process.env.SEED_DATABASE === 'true') {
+        logger.warn('SEED_DATABASE is enabled; rebuilding and seeding all tables.');
+        await seedDatabase({ force: true });
+      } else {
+        const { sequelize } = require('./models');
+        await sequelize.sync();
+      }
       app.listen(port, () => {
         logger.info(`App listening at http://localhost:${port}`);
       });

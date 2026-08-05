@@ -1,5 +1,12 @@
 import { PlaceService } from './../../service/place.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { INgxTableColumn } from 'src/app/common/data-table/ngx-data-table/ngx-data-table.component';
@@ -14,14 +21,13 @@ import { Item } from 'src/app/model/item';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 @Component({
-    selector: 'app-places',
-    templateUrl: './places.component.html',
-    styleUrls: ['./places.component.scss'],
-    standalone: false
+  selector: 'app-places',
+  templateUrl: './places.component.html',
+  styleUrls: ['./places.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class PlacesComponent implements OnInit {
-
-
   @Input()
   currentPlace!: Place;
   // @Input()
@@ -48,34 +54,42 @@ export class PlacesComponent implements OnInit {
   inventory!: any[];
   inventorySubscription!: Subscription;
 
-
-
   constructor(
     private notifyService: NotificationService,
     private route: ActivatedRoute,
     private router: Router,
     public placeService: PlaceService,
     public playerService: PlayerService,
-    public data: BattleService,
-  ) { }
+    public data: BattleService
+  ) {}
 
   ngOnInit(): void {
-    this.getPlace(this.route.snapshot.params['location']);
-    this.monsterMinDamageSubscription = this.data.currentMinDamage.subscribe(monsterMinDamage => this.monsterMinDamage = monsterMinDamage)
-    this.monsterMaxDamageSubscription = this.data.currentMaxDamage.subscribe(monsterMaxDamage => this.monsterMaxDamage = monsterMaxDamage)
-    this.monsterHealthSubscription = this.data.currentMonsterHealth.subscribe(monsterHealth => this.monsterHealth = monsterHealth)
-    this.monsterSubscription = this.data.currentMessage.subscribe(message => this.monsterName = message)
-    this.inBattleSubscription = this.data.currentBattleState.subscribe((state: boolean) => this.inBattle = state)
+    const location = this.route.snapshot.params['location'];
+    if (location) this.getPlace(location);
+    this.monsterMinDamageSubscription = this.data.currentMinDamage.subscribe(
+      monsterMinDamage => (this.monsterMinDamage = monsterMinDamage)
+    );
+    this.monsterMaxDamageSubscription = this.data.currentMaxDamage.subscribe(
+      monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage)
+    );
+    this.monsterHealthSubscription = this.data.currentMonsterHealth.subscribe(
+      monsterHealth => (this.monsterHealth = monsterHealth)
+    );
+    this.monsterSubscription = this.data.currentMessage.subscribe(
+      message => (this.monsterName = message)
+    );
+    this.inBattleSubscription = this.data.currentBattleState.subscribe(
+      (state: boolean) => (this.inBattle = state)
+    );
 
-    this.inventorySubscription = this.data.currentPlayerInventory.subscribe(inventory => this.inventory = inventory);
-
-
+    this.inventorySubscription = this.data.currentPlayerInventory.subscribe(
+      inventory => (this.inventory = inventory)
+    );
   }
-
 
   getPlace(location: string): void {
     this.placeService.getOnePlace(location).subscribe({
-      next: (data) => {
+      next: data => {
         this.currentPlace = data;
         if (this.currentPlace.opponentName != '') {
           this.data.changeMessage(this.currentPlace.opponentName);
@@ -90,7 +104,6 @@ export class PlacesComponent implements OnInit {
           this.data.changeMonsterHealth(0);
           this.data.changeCurrentBattleState(false);
         }
-        console.log(data);
         if (this.currentPlace.objectFound) {
           this.data.addItem(this.currentPlace.objectFound);
         }
@@ -102,15 +115,16 @@ export class PlacesComponent implements OnInit {
           }, 3000);
         }
       },
-      error: (e) => console.error(e),
+      error: e => console.error(e),
     });
   }
 
   ngOnDestroy() {
     this.monsterSubscription.unsubscribe();
     this.inBattleSubscription.unsubscribe();
+    this.monsterMinDamageSubscription.unsubscribe();
+    this.monsterMaxDamageSubscription.unsubscribe();
+    this.monsterHealthSubscription.unsubscribe();
+    this.inventorySubscription.unsubscribe();
   }
-
-
-
 }
