@@ -26,6 +26,8 @@ describe('JWT authentication', () => {
     const { SignJWT } = await import('jose');
     const token = await new SignJWT({ id: 1 })
       .setProtectedHeader({ alg: 'HS256' })
+      .setIssuer('miserere-api')
+      .setAudience('miserere-web')
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
     const req = { headers: { authorization: `Bearer ${token}` } };
     const next = jest.fn();

@@ -1,8 +1,0 @@
-{
-  "/": {
-    "target": "https://api.miserere.porkolab.hu",
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
-  }
-}

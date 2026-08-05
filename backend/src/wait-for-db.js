@@ -3,6 +3,7 @@ const logger = require('./logger/logger');
 const app = require('./server');
 const port = process.env.PORT || 3000;
 const seedDatabase = require('./seed/seeder');
+const { sequelize } = require('./models');
 
 const dbConfig = {
   host: process.env.DB_HOST,
@@ -23,12 +24,20 @@ async function checkDatabaseConnection() {
         logger.warn('SEED_DATABASE is enabled; rebuilding and seeding all tables.');
         await seedDatabase({ force: true });
       } else {
-        const { sequelize } = require('./models');
         await sequelize.sync();
       }
-      app.listen(port, () => {
+      const server = app.listen(port, () => {
         logger.info(`App listening at http://localhost:${port}`);
       });
+      const shutdown = signal => {
+        logger.info(`${signal} received; shutting down.`);
+        server.close(async () => {
+          await sequelize.close();
+          process.exit(0);
+        });
+      };
+      process.once('SIGTERM', () => shutdown('SIGTERM'));
+      process.once('SIGINT', () => shutdown('SIGINT'));
       break;
     } catch (err) {
       logger.error('Unable to connect to the database. Retrying in 5 seconds...');

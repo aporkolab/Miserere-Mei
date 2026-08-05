@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  OnDestroy,
   Output,
   ChangeDetectionStrategy,
 } from '@angular/core';
@@ -23,7 +24,7 @@ import { PlayerService } from 'src/app/service/player.service';
   changeDetection: ChangeDetectionStrategy.Default,
   standalone: false,
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, OnDestroy {
   // @Output() selectOne: EventEmitter<Player> = new EventEmitter<Player>();
   public player$!: Observable<Player>;
   @Output()
@@ -107,5 +108,18 @@ export class PlayerComponent implements OnInit {
     this.inventorySubscription = this.data.currentPlayerInventory.subscribe(
       inventory => (this.inventory = inventory)
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.monsterMinDamageSubscription.unsubscribe();
+    this.monsterMaxDamageSubscription.unsubscribe();
+    this.monsterHealthSubscription.unsubscribe();
+    this.playerHealthSubscription.unsubscribe();
+    this.playerMinDamageSubscription.unsubscribe();
+    this.playerMaxDamageSubscription.unsubscribe();
+    this.playerBulletsNumberSubscription.unsubscribe();
+    this.playerWeaponSubscription.unsubscribe();
+    this.inventorySubscription.unsubscribe();
   }
 }

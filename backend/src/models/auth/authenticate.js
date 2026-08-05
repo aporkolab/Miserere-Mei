@@ -30,7 +30,11 @@ module.exports = async (req, res, next) => {
 
   try {
     const { jwtVerify } = await import('jose');
-    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret), {
+      algorithms: ['HS256'],
+      issuer: 'miserere-api',
+      audience: 'miserere-web',
+    });
     req.user = payload;
     return next();
   } catch {

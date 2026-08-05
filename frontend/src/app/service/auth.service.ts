@@ -5,9 +5,9 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { NotificationService } from './notification.service';
 
 export interface IAuthModel {
-  success: boolean;
   accessToken: string;
   user: User;
 }
@@ -32,7 +32,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private notifications: NotificationService
   ) {
     this.loadSessionData();
   }
@@ -43,7 +44,13 @@ export class AuthService {
 
     try {
       const loginObject: IAuthModel = JSON.parse(loginInfo);
-      if (!loginObject.accessToken || !loginObject.user) throw new Error('Invalid session');
+      if (
+        !loginObject.accessToken ||
+        !loginObject.user ||
+        this.isExpired(loginObject.accessToken)
+      ) {
+        throw new Error('Invalid session');
+      }
       this.accessTokenSubject.next(loginObject.accessToken);
       this.userSubject.next(loginObject.user);
     } catch {
@@ -59,7 +66,7 @@ export class AuthService {
           this.userSubject.next(response.user);
           this.accessTokenSubject.next(response.accessToken);
           sessionStorage.setItem('login', JSON.stringify(response));
-          alert('Sikeres bejelentkezés!');
+          this.notifications.showSuccess('Sikeres bejelentkezés.', 'Miserere Mei');
         })
       )
       .subscribe({
@@ -67,8 +74,10 @@ export class AuthService {
           this.router.navigate(['/']);
         },
         error: err => {
-          console.error('Login error:', err);
-          alert('Hiba történt a bejelentkezés során!');
+          this.notifications.showError(
+            err.status === 401 ? 'Hibás e-mail-cím vagy jelszó.' : 'A bejelentkezés nem sikerült.',
+            'Miserere Mei'
+          );
         },
       });
   }
@@ -86,5 +95,18 @@ export class AuthService {
 
   get accessToken(): string {
     return this.accessTokenSubject.value;
+  }
+
+  get currentUser(): User | null {
+    return this.userSubject.value;
+  }
+
+  private isExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return typeof payload.exp !== 'number' || payload.exp * 1000 <= Date.now();
+    } catch {
+      return true;
+    }
   }
 }

@@ -1,8 +1,61 @@
-#scrollbar {
-  width: 90%;
-  height: 90%;
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.app-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 17.5rem minmax(0, 1fr);
+  min-height: 100dvh;
+  overflow: clip;
+}
+
+.app-ambient {
   position: fixed;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  outline: none;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 10%, rgb(0 229 255 / 12%), transparent 30rem),
+    radial-gradient(circle at 90% 80%, rgb(123 97 255 / 12%), transparent 35rem),
+    linear-gradient(rgb(255 255 255 / 2%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 2%) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    3rem 3rem,
+    3rem 3rem;
+}
+
+.app-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  padding: 1rem;
+}
+
+.app-workspace {
+  min-width: 0;
+}
+
+.app-content {
+  width: min(100% - 2rem, 96rem);
+  min-height: calc(100dvh - 6rem);
+  margin: 0 auto;
+  padding: 1rem 0 3rem;
+}
+
+@media (max-width: 991.98px) {
+  .app-shell {
+    display: block;
+  }
+
+  .app-sidebar {
+    display: none;
+  }
+
+  .app-content {
+    width: min(100% - 1.25rem, 96rem);
+  }
 }

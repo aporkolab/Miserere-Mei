@@ -2,10 +2,7 @@ import { NotificationService } from 'src/app/service/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Player } from '../model/player';
-import { BaseService } from './base.service';
-import { ConfigService } from './config.service';
-import { PlayerService } from './player.service';
+import { Item } from '../model/item';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +42,7 @@ export class BattleService {
   private playerBulletsNumber = new BehaviorSubject<number>(15);
   currentPlayerBulletsNumber = this.playerBulletsNumber.asObservable();
 
-  private playerInventory = new BehaviorSubject<Array<any>>([]);
+  private playerInventory = new BehaviorSubject<Item[]>([]);
   currentPlayerInventory = this.playerInventory.asObservable();
 
   itemName: string = '';
@@ -94,27 +91,29 @@ export class BattleService {
     this.playerBulletsNumber.next(value);
   }
 
-  changePlayerInventory(data: any) {
-    this.playerInventory.next(data);
+  changePlayerInventory(data: Item[]) {
+    this.playerInventory.next([...data]);
   }
 
   //Inventory functions
 
   addItem(dataObj: string) {
     if (dataObj.includes('(delete)')) {
-      const deleteArray = dataObj.split(' ');
-      this.deleteItem(deleteArray[0]);
+      this.deleteItem(dataObj.replace('(delete)', '').trim());
     } else {
       const currentValue = this.playerInventory.value;
-      let obj = {
+      const obj = {
         name: dataObj,
         numberOfItems: 0,
         description: 'Cantus még nem tudja, hogy mire lesz jó a tárgy...',
+        effect: '',
       };
       if (currentValue.find(item => item.name === dataObj)) {
-        let item = currentValue.find(item => item.name === dataObj);
-        item.numberOfItems++;
+        const updatedValue = currentValue.map(item =>
+          item.name === dataObj ? { ...item, numberOfItems: item.numberOfItems + 1 } : item
+        );
         this.message.showInfo('Cantus felvett egy ' + dataObj + '-t', 'Miserere Mei v.1.0.0');
+        this.playerInventory.next(updatedValue);
       } else {
         obj.numberOfItems = 1;
         const updatedValue = [...currentValue, obj];
@@ -126,13 +125,8 @@ export class BattleService {
 
   deleteItem(dataObj: string) {
     const currentValue = this.playerInventory.value;
-    if (this.playerInventory.value.find(item => item.name === dataObj)) {
-      let item = this.playerInventory.value.find(item => item.name === dataObj);
-      const index = this.playerInventory.value.indexOf(item);
-      if (index > -1) {
-        this.playerInventory.value.splice(index, 1);
-      }
-      const updatedValue = [...currentValue];
+    if (currentValue.some(item => item.name === dataObj)) {
+      const updatedValue = currentValue.filter(item => item.name !== dataObj);
       this.message.showInfo('Cantus elveszette: ' + dataObj, 'Miserere Mei v.1.0.0');
       this.playerInventory.next(updatedValue);
     }
@@ -150,7 +144,7 @@ export class BattleService {
           break;
         } else {
           this.consumeItem(itemName);
-          this.changePlayerHealth(this.playerHealth.value + 20);
+          this.changePlayerHealth(Math.min(100, this.playerHealth.value + 20));
         }
         break;
       case 'Lőszer':
@@ -162,7 +156,7 @@ export class BattleService {
           break;
         } else {
           this.consumeItem(itemName);
-          this.changePlayerBulletsNumber(this.playerBulletsNumber.value + 10);
+          this.changePlayerBulletsNumber(Math.min(15, this.playerBulletsNumber.value + 10));
           break;
         }
       case 'AK-47':
@@ -183,21 +177,20 @@ export class BattleService {
     }
   }
 
-  consumeItem(itemName: any) {
-    let item = this.playerInventory.value.find(item => item.name === itemName);
+  consumeItem(itemName: string) {
+    const item = this.playerInventory.value.find(item => item.name === itemName);
     if (item == null) {
       this.message.showError('Nincs ilyen tárgy!', 'Miserere Mei v.1.0.0');
       return;
     }
-    if (item.numberOfItems <= 1) {
-      const index = this.playerInventory.value.indexOf(item);
-      if (index > -1) {
-        // this.message.showWarning(item.name + ' elfogyott.', 'Miserere Mei v.1.0.0')
-        this.playerInventory.value.splice(index, 1);
-      }
-    }
-    item.numberOfItems -= 1;
-    this.playerInventory.next([...this.playerInventory.value]);
+    const updatedValue = this.playerInventory.value
+      .map(current =>
+        current.name === itemName
+          ? { ...current, numberOfItems: current.numberOfItems - 1 }
+          : current
+      )
+      .filter(current => current.numberOfItems > 0);
+    this.playerInventory.next(updatedValue);
     this.message.showInfo(item.name + ' felhasználva.', 'Miserere Mei v.1.0.0');
   }
 }

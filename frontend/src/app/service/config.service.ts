@@ -22,7 +22,7 @@ export class ConfigService {
   ];
 
   placesTableColumns: INgxTableColumn[] = [
-    { key: '_id', title: 'ID' },
+    { key: 'id', title: 'ID' },
     { key: 'location', title: 'Location' },
     { key: 'narrationZoneText', title: 'Narration zone text' },
     { key: 'opponentName', title: "Opponent's name" },
@@ -38,12 +38,11 @@ export class ConfigService {
   ];
 
   usersTableColumn: INgxTableColumn[] = [
-    { key: '_id', title: 'ID' },
+    { key: 'id', title: 'ID' },
     { key: 'firstName', title: 'First Name' },
     { key: 'lastName', title: 'Last Name' },
     { key: 'email', title: 'E-mail' },
     { key: 'role', title: 'Role' },
-    { key: 'password', title: 'Encrypted password' },
   ];
-  constructor() { }
+  constructor() {}
 }

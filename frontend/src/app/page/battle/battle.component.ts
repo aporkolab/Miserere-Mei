@@ -1,16 +1,5 @@
 import { Player } from 'src/app/model/player';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  OnDestroy,
-  Output,
-  Renderer2,
-  ViewChild,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/service/notification.service';
 import { PlaceService } from 'src/app/service/place.service';
@@ -27,12 +16,6 @@ import { BattleService } from 'src/app/service/battle.service';
   standalone: false,
 })
 export class BattleComponent implements OnInit, OnDestroy {
-  @ViewChild('roundNumbers')
-  roundNumbers!: ElementRef;
-  @ViewChild('damagePlayer')
-  damagePlayer!: ElementRef;
-  @ViewChild('damageEnemy')
-  damageEnemy!: ElementRef;
   player$!: Observable<Player>;
   player: Player = new Player();
   enemy$!: Observable<Enemy>;
@@ -117,18 +100,19 @@ export class BattleComponent implements OnInit, OnDestroy {
   }
 
   oneRound(player: Player, enemy: Enemy) {
+    if (this.youAreDead || !this.inBattle || this.enemyHealth <= 0) return;
+
     this.roundNumber += 1;
-    this.inBattle = true;
-    this.healthCheck(player);
-    this.enemyHealthCheck(enemy);
     this.bulletCheck(player);
     this.roundDamageByPlayer = this.randomDamageByPlayer(player);
-    this.roundDamageByEnemy = this.randomDamageByEnemy(enemy);
-    this.data.changePlayerHealth((this.playerHealth -= this.roundDamageByEnemy));
-    this.data.changeMonsterHealth((this.enemyHealth -= this.roundDamageByPlayer));
-    this.healthCheck(player);
+    this.enemyHealth = Math.max(0, this.enemyHealth - this.roundDamageByPlayer);
+    this.data.changeMonsterHealth(this.enemyHealth);
     this.enemyHealthCheck(enemy);
-    this.battleMessage();
+
+    this.roundDamageByEnemy = this.inBattle ? this.randomDamageByEnemy(enemy) : 0;
+    this.playerHealth = Math.max(0, this.playerHealth - this.roundDamageByEnemy);
+    this.data.changePlayerHealth(this.playerHealth);
+    this.healthCheck(player);
   }
 
   randomDamageByPlayer(player: Player) {
@@ -163,39 +147,21 @@ export class BattleComponent implements OnInit, OnDestroy {
       );
       this.data.changePlayerMinDamage(1);
       this.data.changePlayerMaxDamage(3);
-      (this.data.changePlayerWeapon('Bowie-kés'), this.data.changePlayerBulletsNumber(Infinity));
+      this.data.changePlayerWeapon('Bowie-kés');
+      this.data.changePlayerBulletsNumber(0);
     } else {
       this.data.changePlayerBulletsNumber((this.playerBulletsNumber -= 1));
     }
   }
 
   enemyHealthCheck(enemy: Enemy) {
-    if (this.enemyHealth <= 1) {
+    if (this.enemyHealth <= 0) {
       this.data.changeMonsterMaxDamage(0);
       this.data.changeMonsterMinDamage(0);
       this.data.changeMonsterHealth(0);
       this.data.changeMessage('Nincs');
       this.data.changeCurrentBattleState(false);
     }
-  }
-
-  battleMessage() {
-    // Add a new span every round
-    // const roundP: HTMLParagraphElement = this.renderer.createElement('p');
-    // roundP.innerHTML = `<br><b>A(z) ${this.roundNumber}. harci kör eseményei:</b>`;
-    // const damagePlayerP: HTMLParagraphElement =
-    //   this.renderer.createElement('span');
-    // damagePlayerP.innerHTML = `${this.roundDamageByPlayer} sebzést okoztál az ellenségnek.<br>`;
-    // const damageEnemyP: HTMLParagraphElement =
-    //   this.renderer.createElement('span');
-    // damageEnemyP.innerHTML = `Az ellenfeled ${this.roundDamageByPlayer} sebzést okozott neked.<br>`;
-    // this.renderer.appendChild(this.battleMessage.nativeElement, roundP);
-    // this.renderer.appendChild(this.battleMessage.nativeElement, damagePlayerP);
-    // this.renderer.appendChild(this.battleMessage.nativeElement, damageEnemyP);
-
-    this.roundNumbers.nativeElement.innerHTML = `<br><b>A(z) ${this.roundNumber}. harci kör eseményei:</b>`;
-    this.damagePlayer.nativeElement.innerHTML = `${this.roundDamageByPlayer} sebzést okoztál az ellenségnek.<br>`;
-    this.damageEnemy.nativeElement.innerHTML = `Az ellenfeled ${this.roundDamageByEnemy} sebzést okozott neked.<br>`;
   }
 
   ngOnDestroy(): void {

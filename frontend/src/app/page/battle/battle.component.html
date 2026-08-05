@@ -9,8 +9,12 @@
 }
 @if (monsterName != 'Nincs') {
   <div>
-    <p #roundNumbers></p>
-    <span #damagePlayer></span>
-    <span #damageEnemy></span>
+    @if (roundNumber > 0) {
+      <p>
+        <strong>A(z) {{ roundNumber }}. harci kör eseményei:</strong>
+      </p>
+      <span>{{ roundDamageByPlayer }} sebzést okoztál az ellenségnek.</span><br />
+      <span>Az ellenfeled {{ roundDamageByEnemy }} sebzést okozott neked.</span>
+    }
   </div>
 }

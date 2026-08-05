@@ -104,7 +104,6 @@ License - nucleoapp.com/license/
 -------------------------*/
 .ni.spin {
   -webkit-animation: nc-spin 2s infinite linear;
-  -moz-animation: nc-spin 2s infinite linear;
   animation: nc-spin 2s infinite linear;
 }
 
@@ -118,20 +117,9 @@ License - nucleoapp.com/license/
   }
 }
 
-@-moz-keyframes nc-spin {
-  0% {
-    -moz-transform: rotate(0deg);
-  }
-
-  100% {
-    -moz-transform: rotate(360deg);
-  }
-}
-
 @keyframes nc-spin {
   0% {
     -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
@@ -139,7 +127,6 @@ License - nucleoapp.com/license/
 
   100% {
     -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
     -ms-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg);

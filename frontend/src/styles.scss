@@ -1,4 +1,198 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  color-scheme: dark;
+  --mm-bg: #070b14;
+  --mm-surface: rgb(14 23 38 / 88%);
+  --mm-surface-strong: #111c2e;
+  --mm-border: rgb(126 231 255 / 18%);
+  --mm-border-strong: rgb(74 222 255 / 45%);
+  --mm-text: #eef7ff;
+  --mm-muted: #91a4b7;
+  --mm-cyan: #4adeff;
+  --mm-violet: #8b7bff;
+  --mm-success: #42e8a1;
+  --mm-warning: #ffc857;
+  --mm-danger: #ff5c7a;
+  --mm-radius: 1rem;
+  --mm-shadow: 0 1.5rem 4rem rgb(0 0 0 / 35%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 20rem;
+  background: var(--mm-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  color: var(--mm-text);
+  font-family: Inter, system-ui, sans-serif;
+  background: linear-gradient(145deg, #070b14 0%, #0a1220 55%, #080d18 100%);
+}
+
+body,
+p,
+span,
+label,
+.text-body,
+.text-dark,
+.text-secondary {
+  color: inherit !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+  color: var(--mm-text);
+  font-family: 'Space Grotesk', Inter, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--mm-cyan);
+}
+
+:focus-visible {
+  outline: 2px solid var(--mm-cyan);
+  outline-offset: 3px;
+}
+
+.card,
+.navbar,
+.form-control,
+.form-select,
+.table-responsive {
+  color: var(--mm-text);
+  background: var(--mm-surface) !important;
+  border: 1px solid var(--mm-border) !important;
+  border-radius: var(--mm-radius) !important;
+  box-shadow: var(--mm-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.card::before {
+  position: absolute;
+  inset: 0 auto auto 1.25rem;
+  width: 4rem;
+  height: 1px;
+  content: '';
+  background: var(--mm-cyan);
+  box-shadow: 0 0 1rem var(--mm-cyan);
+}
+
+.card-header,
+.card-body,
+.table,
+.table > :not(caption) > * > * {
+  color: var(--mm-text);
+  background: transparent !important;
+}
+
+.form-control,
+.form-select {
+  min-height: 3rem;
+  color: var(--mm-text) !important;
+  box-shadow: none;
+}
+
+.form-control::placeholder {
+  color: #6f8295;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--mm-cyan) !important;
+  box-shadow: 0 0 0 0.2rem rgb(74 222 255 / 12%);
+}
+
+.btn {
+  min-height: 2.75rem;
+  padding: 0.7rem 1.1rem;
+  color: #031018 !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, var(--mm-cyan), #5a8cff) !important;
+  border: 0 !important;
+  border-radius: 0.7rem !important;
+  box-shadow: 0 0.75rem 1.75rem rgb(42 184 255 / 18%);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 1rem 2.25rem rgb(42 184 255 / 28%);
+}
+
+.btn-danger {
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff4668, #bb315a) !important;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ffd36a, #ff9f43) !important;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #58f2b2, #22b98a) !important;
+}
+
+.table {
+  margin: 0;
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--mm-text);
+  --bs-table-striped-color: var(--mm-text);
+  --bs-table-striped-bg: rgb(255 255 255 / 2.5%);
+  --bs-table-hover-color: var(--mm-text);
+  --bs-table-hover-bg: rgb(74 222 255 / 6%);
+}
+
+.table th {
+  color: var(--mm-cyan) !important;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom-color: var(--mm-border-strong);
+}
+
+.table td {
+  border-color: var(--mm-border);
+}
+
+.page-link {
+  color: var(--mm-text);
+  background: var(--mm-surface-strong);
+  border-color: var(--mm-border);
+}
+
+.page-link.active,
+.active > .page-link {
+  color: #031018;
+  background: var(--mm-cyan);
+  border-color: var(--mm-cyan);
+}
+
+.alert-danger {
+  color: #ffd9e1 !important;
+  background: rgb(255 92 122 / 15%) !important;
+  border: 1px solid rgb(255 92 122 / 35%);
+}
+
 .app-toast {
   position: fixed;
   top: 1rem;
@@ -9,9 +203,10 @@
   width: min(24rem, calc(100vw - 2rem));
   padding: 1rem 1.25rem;
   color: #fff;
-  background: #344767;
-  border-radius: 0.75rem;
-  box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 25%);
+  background: var(--mm-surface-strong);
+  border: 1px solid var(--mm-border-strong);
+  border-radius: var(--mm-radius);
+  box-shadow: var(--mm-shadow);
   opacity: 0;
   transform: translateY(-0.75rem);
   transition:
@@ -24,15 +219,25 @@
   transform: translateY(0);
 }
 .app-toast--success {
-  background: #198754;
+  border-color: var(--mm-success);
 }
 .app-toast--error {
-  background: #dc3545;
+  border-color: var(--mm-danger);
 }
 .app-toast--warning {
-  color: #212529;
-  background: #ffc107;
+  border-color: var(--mm-warning);
 }
 .app-toast--info {
-  background: #0d6efd;
+  border-color: var(--mm-cyan);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

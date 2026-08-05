@@ -11,7 +11,7 @@
       </div>
       <div class="card-body">
         <form #userForm="ngForm">
-          <input type="hidden" name="id" [(ngModel)]="user._id" />
+          <input type="hidden" name="id" [(ngModel)]="user.id" />
 
           <h3 class="h5 text-secondary">First name *</h3>
           <div class="row">
@@ -98,13 +98,13 @@
                   class="form-control"
                   name="password"
                   [(ngModel)]="user.password"
-                  required
-                  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$"
+                  [required]="!user.id"
+                  minlength="8"
                 />
               </div>
               @if (userForm.controls['password']?.invalid && userForm.controls['password']?.touched) {
                 <div class="alert alert-danger" role="alert">
-                  The password must be at least 7 characters long and contain at least 1 letter and 1 number!
+                  The password must be at least 8 characters long. Leave it empty to keep the current password.
                 </div>
               }
             </div>

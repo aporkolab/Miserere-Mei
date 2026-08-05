@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Place } from 'src/app/model/place';
-import { PlaceService } from 'src/app/service/place.service';
+import { AllPlaceService } from 'src/app/service/allplace.service';
 import { NotificationService } from 'src/app/service/notification.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class AllPlaceEditorComponent implements OnInit {
   entity = 'allplace';
 
   constructor(
-    private placeService: PlaceService,
+    private allPlaceService: AllPlaceService,
     private route: ActivatedRoute,
     private router: Router,
     private notifyService: NotificationService
@@ -28,7 +28,7 @@ export class AllPlaceEditorComponent implements OnInit {
     this.route.params.subscribe({
       next: param => {
         if (param['id'] && param['id'] !== '0') {
-          this.allplace$ = this.placeService.getOne(param['id']);
+          this.allplace$ = this.allPlaceService.getOne(param['id']);
           this.allplace$.subscribe({
             next: allplace => (this.allplace = allplace || new Place()),
           });
@@ -38,7 +38,7 @@ export class AllPlaceEditorComponent implements OnInit {
   }
 
   onUpdate(allplace: Place) {
-    this.placeService.update(allplace).subscribe({
+    this.allPlaceService.update(allplace).subscribe({
       next: () => this.router.navigate(['/', 'allplace']),
       error: err => this.showError(err),
       complete: () => this.showSuccessEdit(),
@@ -46,7 +46,7 @@ export class AllPlaceEditorComponent implements OnInit {
   }
 
   onCreate(allplace: Place) {
-    this.placeService.create(allplace).subscribe({
+    this.allPlaceService.create(allplace).subscribe({
       next: () => this.router.navigate(['/', 'allplace']),
       error: err => this.showError(err),
       complete: () => this.showSuccessCreate(),

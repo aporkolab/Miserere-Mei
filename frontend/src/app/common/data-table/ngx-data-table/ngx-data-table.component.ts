@@ -1,15 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
-import { User } from 'src/app/model/user';
 
 export interface INgxTableColumn {
   title: string;
@@ -23,7 +15,7 @@ export interface INgxTableColumn {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class NgxDataTableComponent<T extends Record<string, any>> implements OnInit {
+export class NgxDataTableComponent<T extends Record<string, unknown>> {
   @Input() list: T[] = [];
   @Input() columns: INgxTableColumn[] = [];
   @Input() entity: string = '';
@@ -41,8 +33,6 @@ export class NgxDataTableComponent<T extends Record<string, any>> implements OnI
   endSlice: number = this.pageSize;
   page: number = 1;
 
-  user: User | null = null; // Tárolja az aktuális felhasználót
-
   get pageList(): number[] {
     const pageSize = Math.ceil(this.list.length / this.pageSize);
     return Array.from({ length: pageSize }, (_, i) => i + 1);
@@ -57,14 +47,8 @@ export class NgxDataTableComponent<T extends Record<string, any>> implements OnI
     public router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.auth.user$.subscribe(user => {
-      this.user = user;
-    });
-  }
-
   get isAdmin(): boolean {
-    return this.user?.role === 3;
+    return this.auth.currentUser?.role === 3;
   }
 
   onColumnSelect(key: string): void {

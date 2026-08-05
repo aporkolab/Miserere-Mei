@@ -14,6 +14,5 @@ db.sequelize = sequelize;
 db.User = require('./user')(sequelize, DataTypes);
 db.Place = require('./place')(sequelize, DataTypes);
 db.Player = require('./player')(sequelize, DataTypes);
-db.AllPlace = require('./allPlace')(sequelize, DataTypes);
 
 module.exports = db;

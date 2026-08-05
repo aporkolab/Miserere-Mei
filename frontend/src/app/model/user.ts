@@ -1,9 +1,9 @@
 export class User {
   [k: string]: any;
-  _id: number | string = '';
+  id: number | string = '';
   firstName: string = '';
   lastName: string = '';
   email: string = '';
-  role: number = 1 | 2 | 3;
+  role: 1 | 2 | 3 = 1;
   password: string = '';
 }

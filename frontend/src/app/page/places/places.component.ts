@@ -1,24 +1,10 @@
 import { PlaceService } from './../../service/place.service';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
-import { INgxTableColumn } from 'src/app/common/data-table/ngx-data-table/ngx-data-table.component';
+import { Subscription } from 'rxjs';
 import { Place } from 'src/app/model/place';
-import { Player } from 'src/app/model/player';
-import { AuthService } from 'src/app/service/auth.service';
-import { ConfigService } from 'src/app/service/config.service';
 import { NotificationService } from 'src/app/service/notification.service';
-import { PlayerService } from 'src/app/service/player.service';
 import { BattleService } from 'src/app/service/battle.service';
-import { Item } from 'src/app/model/item';
-import PerfectScrollbar from 'perfect-scrollbar';
 
 @Component({
   selector: 'app-places',
@@ -28,16 +14,8 @@ import PerfectScrollbar from 'perfect-scrollbar';
   standalone: false,
 })
 export class PlacesComponent implements OnInit {
-  @Input()
+  private gameOverTimer?: ReturnType<typeof setTimeout>;
   currentPlace!: Place;
-  // @Input()
-  // playerData!: Player;
-  // monsterName = '';
-  @Input() columns: INgxTableColumn[] = [];
-  @Input() entity: string = '';
-
-  @Output() selectOne: EventEmitter<Place> = new EventEmitter<Place>();
-  @Output() deleteOne: EventEmitter<Place> = new EventEmitter<Place>();
 
   monsterName = '';
 
@@ -59,7 +37,6 @@ export class PlacesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public placeService: PlaceService,
-    public playerService: PlayerService,
     public data: BattleService
   ) {}
 
@@ -109,17 +86,18 @@ export class PlacesComponent implements OnInit {
         }
 
         if (this.currentPlace.location === 'GameOver') {
-          setTimeout(() => {
-            this.getPlace('GameBeginning');
-            window.location.reload();
+          this.gameOverTimer = setTimeout(() => {
+            this.router.navigate(['/place', 'GameBeginning']);
           }, 3000);
         }
       },
-      error: e => console.error(e),
+      error: () =>
+        this.notifyService.showError('A helyszín nem tölthető be.', 'Kommunikációs hiba'),
     });
   }
 
   ngOnDestroy() {
+    if (this.gameOverTimer) clearTimeout(this.gameOverTimer);
     this.monsterSubscription.unsubscribe();
     this.inBattleSubscription.unsubscribe();
     this.monsterMinDamageSubscription.unsubscribe();

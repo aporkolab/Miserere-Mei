@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import Scrollbar from 'smooth-scrollbar';
 import { AuthService } from 'src/app/service/auth.service';
 
 @Component({

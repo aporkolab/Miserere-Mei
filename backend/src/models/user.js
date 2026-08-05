@@ -13,27 +13,40 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: { isEmail: true, len: [3, 254] },
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: { len: [8, 255] },
       },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: { len: [1, 100] },
       },
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: { len: [1, 100] },
       },
       role: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: { isIn: [[1, 2, 3]] },
       },
     },
     {
       tableName: 'User',
       freezeTableName: true,
+      defaultScope: {
+        attributes: { exclude: ['password'] },
+      },
+      scopes: {
+        withPassword: {
+          attributes: { include: ['password'] },
+        },
+      },
       hooks: {
         beforeCreate: async user => {
           if (user.password) {

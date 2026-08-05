@@ -31,30 +31,26 @@ COPY . .
 RUN npm run build:prod
 
 # Production stage using nginx
-FROM nginx:1.25-alpine AS production
+FROM nginx:1.29-alpine AS production
 
 # Install dumb-init
 RUN apk add --no-cache dumb-init
-
-# Create non-root user
-RUN addgroup -g 1001 -S nginx && \
-    adduser -S nginxuser -u 1001 -G nginx
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built application from build stage
-COPY --from=build --chown=nginxuser:nginx /usr/src/app/dist/miserere-mei/ /usr/share/nginx/html/
+COPY --from=build --chown=nginx:nginx /usr/src/app/dist/miserere-mei/ /usr/share/nginx/html/
 
 # Switch to non-root user
-USER nginxuser
+USER nginx
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
 
 # Expose port
-EXPOSE 80
+EXPOSE 8080
 
 # Start nginx
 ENTRYPOINT ["dumb-init", "--"]

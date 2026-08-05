@@ -1,6 +1,6 @@
 export class Place {
   [k: string]: any;
-  _id: number | string = '';
+  id: number | string = '';
   location: string = '';
   narrationZoneText: string = '';
   opponentName: string = '';

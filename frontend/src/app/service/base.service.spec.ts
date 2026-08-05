@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { BaseService } from './base.service';
 
 describe('BaseService', () => {
-  let service: BaseService<{ _id: string }>;
+  let service: BaseService<{ id: string }>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BaseService<{ _id: string }>);
+    service = TestBed.inject(BaseService<{ id: string }>);
   });
 
   it('should be created', () => {

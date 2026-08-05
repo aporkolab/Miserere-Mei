@@ -1,0 +1,111 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 5rem;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--mm-border);
+  backdrop-filter: blur(16px);
+}
+
+.mission-id {
+  display: grid;
+}
+.mission-id small {
+  color: var(--mm-muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+}
+.mission-id strong {
+  color: var(--mm-text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+.topbar-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.launch {
+  padding: 0.65rem 1rem;
+  color: var(--mm-cyan);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--mm-border-strong);
+  border-radius: 0.6rem;
+}
+.launch:hover {
+  color: #06131b;
+  background: var(--mm-cyan);
+}
+.menu-toggle,
+.mobile-brand,
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .topbar {
+    min-height: 4.5rem;
+    padding: 0 0.75rem;
+  }
+  .mission-id,
+  .launch {
+    display: none;
+  }
+  .mobile-brand {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    color: var(--mm-text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+  }
+  .mobile-brand span {
+    display: grid;
+    width: 2rem;
+    aspect-ratio: 1;
+    color: #05121a !important;
+    background: var(--mm-cyan);
+    border-radius: 0.5rem;
+    place-items: center;
+  }
+  .menu-toggle {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--mm-text);
+    background: var(--mm-surface);
+    border: 1px solid var(--mm-border);
+    border-radius: 0.6rem;
+    place-items: center;
+  }
+  .mobile-menu {
+    position: relative;
+    z-index: 10;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+    max-height: 0;
+    overflow: hidden;
+    background: var(--mm-bg);
+    transition: 180ms ease;
+  }
+  .mobile-menu--open {
+    display: grid;
+    max-height: 30rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--mm-border);
+  }
+  .mobile-menu a,
+  .mobile-menu button {
+    padding: 0.8rem;
+    color: var(--mm-text);
+    text-align: center;
+    background: var(--mm-surface);
+    border: 1px solid var(--mm-border);
+    border-radius: 0.6rem;
+  }
+}

@@ -43,7 +43,7 @@ export class UsersComponent {
   }
 
   onSelectOne(user: User): void {
-    this.router.navigate(['/', 'users', 'select', user._id]);
+    this.router.navigate(['/', 'users', 'select', user.id]);
   }
 
   onDeleteOne(user: User): void {

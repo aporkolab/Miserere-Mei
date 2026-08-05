@@ -1,1 +1,129 @@
+:host {
+  display: block;
+  height: 100%;
+}
 
+.command-rail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(180deg, rgb(17 28 46 / 95%), rgb(8 14 25 / 95%));
+  border: 1px solid var(--mm-border);
+  border-radius: 1.25rem;
+  box-shadow: var(--mm-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.brand {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.35rem;
+  color: var(--mm-text);
+}
+
+.brand:hover {
+  color: var(--mm-text);
+}
+.brand strong {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.brand small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--mm-muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+}
+
+.brand-mark {
+  display: grid;
+  width: 2.7rem;
+  aspect-ratio: 1;
+  color: #05121a !important;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  place-items: center;
+  background: linear-gradient(135deg, var(--mm-cyan), var(--mm-violet));
+  border-radius: 0.75rem;
+  box-shadow: 0 0 1.5rem rgb(74 222 255 / 25%);
+}
+
+.system-status {
+  padding: 1rem 0.35rem;
+  margin: 1rem 0;
+  color: var(--mm-muted);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  border-top: 1px solid var(--mm-border);
+  border-bottom: 1px solid var(--mm-border);
+}
+
+.system-status span {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.4rem;
+  background: var(--mm-success);
+  border-radius: 50%;
+  box-shadow: 0 0 0.7rem var(--mm-success);
+}
+
+.nav-section {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+.nav-section--bottom {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+.nav-label {
+  padding: 0 0.65rem 0.3rem;
+  color: #61768a !important;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nav-section a,
+.nav-section button {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  color: var(--mm-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.7rem;
+  transition: 160ms ease;
+}
+
+.nav-section button {
+  cursor: pointer;
+}
+.nav-section a:hover,
+.nav-section button:hover,
+.nav-section a.active {
+  color: var(--mm-text);
+  background: rgb(74 222 255 / 7%);
+  border-color: var(--mm-border);
+  transform: translateX(0.2rem);
+}
+
+.nav-section a.active {
+  color: var(--mm-cyan);
+}
+.nav-section i {
+  width: 1rem;
+  color: var(--mm-cyan);
+  text-align: center;
+}

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
+const DUMMY_PASSWORD_HASH = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
 router.post('/', async (req, res, next) => {
   const { email, password } = req.body;
@@ -13,13 +14,14 @@ router.post('/', async (req, res, next) => {
   }
 
   try {
-    const user = await User.findOne({
+    const user = await User.scope('withPassword').findOne({
       where: {
-        email,
+        email: email.trim().toLowerCase(),
       },
     });
 
     if (!user) {
+      await bcrypt.compare(password, DUMMY_PASSWORD_HASH);
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
@@ -35,10 +37,13 @@ router.post('/', async (req, res, next) => {
       role: user.role,
     })
       .setProtectedHeader({ alg: 'HS256' })
+      .setIssuer('miserere-api')
+      .setAudience('miserere-web')
       .setIssuedAt()
       .setExpirationTime('1h')
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
+    res.set('Cache-Control', 'no-store');
     return res.json({
       accessToken,
       user: {
@@ -50,9 +55,7 @@ router.post('/', async (req, res, next) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
-      error: 'Internal server error',
-    });
+    return next(error);
   }
 });
 

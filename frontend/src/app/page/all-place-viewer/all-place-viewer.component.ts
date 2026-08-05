@@ -1,5 +1,4 @@
 import { AllPlaceService } from './../../service/allplace.service';
-import { PlaceService } from 'src/app/service/place.service';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -22,7 +21,6 @@ export class AllPlaceViewerComponent implements OnInit {
 
   constructor(
     private config: ConfigService,
-    private placeService: PlaceService,
     private allPlaceService: AllPlaceService,
     private router: Router,
     private notifyService: NotificationService
@@ -43,11 +41,11 @@ export class AllPlaceViewerComponent implements OnInit {
   }
 
   onSelectOne(allPlace: AllPlace): void {
-    this.router.navigate(['/place', 'select', allPlace.location]);
+    this.router.navigate(['/allplace', 'select', allPlace.id]);
   }
 
   onDeleteOne(allPlace: AllPlace): void {
-    this.placeService.delete(allPlace).subscribe({
+    this.allPlaceService.delete(allPlace).subscribe({
       next: () => this.loadPlaces(),
       error: err => this.showError(err),
       complete: () => this.showSuccessDelete(),

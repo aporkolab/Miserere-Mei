@@ -64,7 +64,7 @@
                           (loginForm.controls['password']?.dirty && !loginForm.controls['password']?.valid),
                       }"
                       required
-                      pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                      minlength="8"
                     />
                   </div>
                   @if (
@@ -72,8 +72,7 @@
                     !loginForm.controls['password']?.valid
                   ) {
                     <div class="alert alert-danger" role="alert">
-                      Érvénytelen jelszó! A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell
-                      betűket és számokat is.
+                      A jelszónak legalább 8 karakter hosszúnak kell lennie.
                     </div>
                   }
 

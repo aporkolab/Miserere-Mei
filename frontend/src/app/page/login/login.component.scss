@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+.page-header {
+  position: relative;
+  min-height: calc(100dvh - 8rem) !important;
+  overflow: hidden;
+}
+.page-header::before {
+  position: absolute;
+  inset: 10% 35% 10% 5%;
+  content: '';
+  background: radial-gradient(circle, rgb(74 222 255 / 10%), transparent 65%);
+}
+.card-plain {
+  padding: 1rem;
+  background: var(--mm-surface) !important;
+  border: 1px solid var(--mm-border) !important;
+  border-radius: 1rem;
+  box-shadow: var(--mm-shadow);
+}
+.card-header p {
+  color: var(--mm-muted) !important;
+  line-height: 1.7;
+}
+.text-gradient {
+  color: var(--mm-cyan) !important;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+.oblique-image {
+  filter: saturate(0.6) contrast(1.1) brightness(0.55);
+}

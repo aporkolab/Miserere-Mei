@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const { sequelize, User, Place, Player } = require('../models');
 const bcrypt = require('bcrypt');
+const logger = require('../logger/logger');
 
 const chunkArray = (array, chunkSize) => {
   const chunks = [];
@@ -15,7 +16,7 @@ const seedDatabase = async ({ force = false } = {}) => {
   try {
     // Synchronize all models
     await sequelize.sync({ force });
-    console.log('All tables have been created or updated.');
+    logger.info('All tables have been created or updated.');
 
     const placesPath = path.resolve(__dirname, '../seed/places.json');
     const playersPath = path.resolve(__dirname, '../seed/player.json');
@@ -38,16 +39,16 @@ const seedDatabase = async ({ force = false } = {}) => {
     }
 
     for (const chunk of userChunks) {
-      for (let user of chunk) {
+      for (const user of chunk) {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
       }
       await User.bulkCreate(chunk);
     }
 
-    console.log('Database has been seeded successfully!');
+    logger.info('Database has been seeded successfully.');
   } catch (error) {
-    console.error('Error seeding the database: ', error);
+    logger.error(error.stack || error.message);
     throw error;
   }
 };

@@ -4,6 +4,5 @@ describe('model registry', () => {
     expect(models.User).toBeDefined();
     expect(models.Place).toBeDefined();
     expect(models.Player).toBeDefined();
-    expect(models.AllPlace).toBeDefined();
   });
 });

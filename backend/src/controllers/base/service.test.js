@@ -14,4 +14,23 @@ describe('base service', () => {
     const model = { findByPk: jest.fn().mockResolvedValue(null) };
     await expect(baseService(model).update(99, {})).rejects.toThrow('Not found');
   });
+
+  test('drops fields outside the writable allowlist', async () => {
+    const entity = { update: jest.fn().mockResolvedValue({ id: 1 }) };
+    const model = { findByPk: jest.fn().mockResolvedValue(entity) };
+    const service = baseService(model, { writableFields: ['name'] });
+
+    await service.update(1, { name: 'safe', role: 3 });
+
+    expect(entity.update).toHaveBeenCalledWith({ name: 'safe' });
+  });
+
+  test('ignores query fields outside the searchable allowlist', async () => {
+    const model = { findAll: jest.fn().mockResolvedValue([]) };
+    const service = baseService(model, { searchableFields: ['name'] });
+
+    await service.findAll({ password: 'secret' });
+
+    expect(model.findAll).toHaveBeenCalledWith();
+  });
 });

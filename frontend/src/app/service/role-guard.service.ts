@@ -1,28 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { UrlTree } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoleGuardService implements CanActivate {
-  constructor(public auth: AuthService, public router: Router) { }
+  constructor(
+    public auth: AuthService,
+    public router: Router
+  ) {}
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     const expectedRole = route.data['expectedRole'];
-
-    return this.auth.user$.pipe(
-      map(user => {
-        const userRole = user?.role || 1;
-
-        if (userRole < expectedRole) {
-          this.router.navigate(['forbidden']);
-          return false;
-        }
-        return true;
-      })
-    );
+    const userRole = this.auth.currentUser?.role || 1;
+    return userRole >= expectedRole ? true : this.router.createUrlTree(['/forbidden']);
   }
 }

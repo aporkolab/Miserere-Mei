@@ -1,155 +1,88 @@
 @if (!currentPlace) {
-  <div class="load">
-    <img src="../../../assets/img/Rhombus.gif" alt="preloader" width="100" />
-    <div>Loading...</div>
+  <div class="loading-state" role="status">
+    <span class="loader" aria-hidden="true"></span>
+    <strong>HELYSZÍN DEKÓDOLÁSA</strong>
+    <small>Kapcsolódás a wasteland archívumhoz…</small>
   </div>
-}
+} @else {
+  <header class="location-header">
+    <div>
+      <span>AKTÍV HELYSZÍN</span>
+      <h1>{{ currentPlace.location }}</h1>
+    </div>
+    <div class="threat" [class.threat--active]="inBattle">
+      <span></span>{{ inBattle ? 'FENYEGETÉS ÉSZLELVE' : 'TERÜLET BIZTONSÁGOS' }}
+    </div>
+  </header>
 
-@if (currentPlace) {
   <app-player></app-player>
-}
-@if (currentPlace) {
-  <div class="row mt-4">
-    <div class="col-lg-7 mb-lg-0 mb-4">
-      <div class="card">
-        <div class="card-body p-3">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="d-flex flex-column h-100">
-                <p class="mb-1 pt-2 text-bold">Miserere Mei v.1.0.0.</p>
-                <h5 class="font-weight-bolder">Helyszín leírása:</h5>
-                <p class="mb-5">{{ currentPlace.narrationZoneText }}</p>
-                @if (!inBattle && currentPlace.decision1 != ' ') {
-                  <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto">
-                    <button class="btn btn-secondary" (click)="getPlace(currentPlace.furtherLocation1)">
-                      {{ currentPlace.decision1 }}
-                    </button>
-                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                  </a>
-                }
-                @if (currentPlace.decision2 !== '' && !inBattle) {
-                  <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto">
-                    <button class="btn btn-secondary" (click)="getPlace(currentPlace.furtherLocation2)">
-                      {{ currentPlace.decision2 }}
-                    </button>
-                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                  </a>
-                }
-                @if (currentPlace.decision3 !== '' && !inBattle) {
-                  <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto">
-                    <button class="btn btn-secondary" (click)="getPlace(currentPlace.furtherLocation3)">
-                      {{ currentPlace.decision3 }}
-                    </button>
-                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                  </a>
-                }
-                @if (currentPlace.decision4 !== '' && !inBattle) {
-                  <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto">
-                    <button class="btn btn-secondary" (click)="getPlace(currentPlace.furtherLocation4)">
-                      {{ currentPlace.decision4 }}
-                    </button>
-                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                  </a>
-                }
-              </div>
-            </div>
-            <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-              <div class="bg-gradient-secondary border-radius-lg h-100">
-                <img
-                  src="../../../assets/img/shapes/waves-white.svg"
-                  class="position-absolute h-100 w-50 top-0 d-lg-block d-none"
-                  alt="waves"
-                />
-                <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                  <img
-                    class="w-100 position-relative z-index-2 pt-4"
-                    src="../../../assets/img/pixArt/{{ currentPlace.location }}.jpg"
-                    alt="illustration"
-                  />
-                </div>
-              </div>
-            </div>
+
+  <section class="mission-grid">
+    <article class="story-panel">
+      <div class="story-image">
+        <img src="assets/img/pixArt/{{ currentPlace.location }}.jpg" [alt]="currentPlace.location + ' helyszín'" />
+        <span>OPTIKAI NAPLÓ // {{ currentPlace.location }}</span>
+      </div>
+      <div class="story-copy">
+        <span class="panel-label">NARRATÍV ADATCSOMAG</span>
+        <p>{{ currentPlace.narrationZoneText }}</p>
+        @if (!inBattle) {
+          <div class="decision-grid" aria-label="Lehetséges döntések">
+            @if (currentPlace.decision1.trim()) {
+              <button (click)="getPlace(currentPlace.furtherLocation1)">
+                <b>01</b>{{ currentPlace.decision1 }}<span>→</span>
+              </button>
+            }
+            @if (currentPlace.decision2.trim()) {
+              <button (click)="getPlace(currentPlace.furtherLocation2)">
+                <b>02</b>{{ currentPlace.decision2 }}<span>→</span>
+              </button>
+            }
+            @if (currentPlace.decision3.trim()) {
+              <button (click)="getPlace(currentPlace.furtherLocation3)">
+                <b>03</b>{{ currentPlace.decision3 }}<span>→</span>
+              </button>
+            }
+            @if (currentPlace.decision4.trim()) {
+              <button (click)="getPlace(currentPlace.furtherLocation4)">
+                <b>04</b>{{ currentPlace.decision4 }}<span>→</span>
+              </button>
+            }
           </div>
-        </div>
+        }
       </div>
-    </div>
-    <div class="col-lg-5">
-      <div class="card h-100 p-3">
-        <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100">
-          <span class="mask bg-gradient-dark"></span>
-          <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
-            <h5 class="text-white font-weight-bolder mb-4 pt-2">Harcmező:</h5>
-            <p class="text-white">
-              <app-battle></app-battle>
-            </p>
-          </div>
-        </div>
+    </article>
+
+    <aside class="battle-panel">
+      <span class="panel-label">HARCÁSZATI INTERFÉSZ</span>
+      <app-battle></app-battle>
+    </aside>
+  </section>
+
+  <section class="inventory-panel">
+    <header>
+      <div>
+        <span class="panel-label">FELSZERELÉS</span>
+        <h2>Leltár</h2>
       </div>
-    </div>
-  </div>
-}
-@if (currentPlace) {
-  <div class="col-lg-12">
-    <div class="card z-index-2">
-      <div class="card-header pb-0">
-        <h6>Leltár</h6>
-        <p class="text-sm">
-          <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-          <span class="font-weight-bold">
-            <div class="card">
-              <div class="table-responsive">
-                <table class="table align-items-center mb-0">
-                  <tbody>
-                    @for (item of inventory; track item) {
-                      <tr>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-                            <div>
-                              <img
-                                src="../../../assets/img/inventory/{{ item.name }}.png"
-                                class="avatar avatar-sm me-3"
-                              />
-                            </div>
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-xs">{{ item.name }}</h6>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-                            <div class="d-flex flex-column justify-content-center">
-                              @if (item.numberOfItems) {
-                                <p class="text-xs font-weight-bold mb-0">{{ item.numberOfItems }} darab</p>
-                              }
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex px-2 py-1">
-                            <div class="d-flex flex-column justify-content-center">
-                              <p class="text-xs font-weight-bold mb-0">{{ item.description }}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="align-middle">
-                          <button
-                            (click)="this.data.inventoryUsing(item['name'])"
-                            class="text-error font-weight-bold text-xs btn btn-secondary"
-                            data-toggle="tooltip"
-                            data-original-title="Tárgy felhasználása"
-                          >
-                            Tárgy felhasználása
-                          </button>
-                        </td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
+      <strong>{{ inventory.length }} TÍPUS</strong>
+    </header>
+    @if (inventory.length === 0) {
+      <p class="empty-state">A leltár üres.</p>
+    } @else {
+      <div class="inventory-grid">
+        @for (item of inventory; track item.name) {
+          <article class="inventory-item">
+            <img src="assets/img/inventory/{{ item.name }}.png" [alt]="item.name" />
+            <div>
+              <h3>{{ item.name }}</h3>
+              <p>{{ item.description }}</p>
+              <small>{{ item.numberOfItems }} DB</small>
             </div>
-          </span>
-        </p>
+            <button type="button" (click)="data.inventoryUsing(item.name)">HASZNÁLAT</button>
+          </article>
+        }
       </div>
-    </div>
-  </div>
+    }
+  </section>
 }

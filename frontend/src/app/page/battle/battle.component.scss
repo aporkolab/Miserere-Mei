@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  color: var(--mm-text);
+}
+
+button {
+  width: 100%;
+  margin: 1rem 0;
+}
+
+div:last-child {
+  padding: 1rem;
+  color: var(--mm-muted);
+  background: rgb(255 255 255 / 2%);
+  border-left: 2px solid var(--mm-danger);
+  border-radius: 0.5rem;
+}
+
+p {
+  margin-bottom: 0.6rem;
+  color: var(--mm-text) !important;
+}
+span {
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
