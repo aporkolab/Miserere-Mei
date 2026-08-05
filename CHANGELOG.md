@@ -192,7 +192,8 @@ installation required.
 
 For questions about releases or upgrade issues:
 
-- **E-mail**: `ap kukac aporkolab pont com`
+- **Kapcsolat**: az alkalmazás szerveroldali, rate-limittel védett
+  kapcsolatfelvételi űrlapja
 - 🐛 **Issues**:
   [GitHub Issues](https://github.com/APorkolab/Miserere-Mei/issues)
 - 💬 **Discussions**:

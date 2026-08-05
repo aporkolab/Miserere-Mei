@@ -6,10 +6,12 @@
 2. Generálj titkot: `openssl rand -hex 32`.
 3. Adj meg egyedi `ADMIN_EMAIL` és erős `ADMIN_PASSWORD` értéket az első
    indításhoz.
-4. Állítsd a nyilvános HTTPS origint a `CORS_ORIGIN` mezőbe.
-5. Nyilvános HTTPS esetén állítsd a `COOKIE_SECURE=true` értéket.
-6. Indítsd: `docker compose up -d --build`.
-7. Ellenőrizd: `curl --fail http://localhost:8080/ready`.
+4. A kapcsolatfelvételhez a secret managerben állítsd be a `CONTACT_EMAIL` és
+   `SMTP_*` értékeket.
+5. Állítsd a nyilvános HTTPS origint a `CORS_ORIGIN` mezőbe.
+6. Nyilvános HTTPS esetén állítsd a `COOKIE_SECURE=true` értéket.
+7. Indítsd: `docker compose up -d --build`.
+8. Ellenőrizd: `curl --fail http://localhost:8080/ready`.
 
 A TLS-t egy reverse proxy vagy load balancer zárja le. Proxy mögött
 `TRUST_PROXY=true` szükséges. A `/data` volume nélkül az adatbázis a konténer

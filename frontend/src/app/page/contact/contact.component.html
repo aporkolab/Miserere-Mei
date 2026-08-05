@@ -1,33 +1,37 @@
-<body>
-  <div id="content">
-    <img src="assets/img/logos/hootie-in-bootee.png" class="center" alt="Hootie in Bootee Studio" />
+<main class="contact-shell">
+  <section class="contact-card" aria-labelledby="contact-title">
+    <img src="assets/img/logos/hootie-in-bootee.png" class="studio-logo" alt="Hootie in Bootee Studio" />
+    <p class="eyebrow">Biztonságos csatorna // v1.7.0</p>
+    <h1 id="contact-title">Kapcsolat</h1>
+    <p class="lede">
+      Az e-mail-cím nem kerül a böngészőbe vagy a forráskódba. Az űrlap szerveroldalon, védett SMTP kapcsolaton
+      továbbítja az üzenetet Dr. Porkoláb Ádámnak.
+    </p>
 
-    <div class="title">Miserere Mei - The Precarious Trails to the Library of Preachers v1.7.0</div>
-    <br />
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label for="contact-name">Név</label>
+      <input id="contact-name" type="text" formControlName="name" autocomplete="name" maxlength="100" />
 
-    <div class="paragraph">
-      <b>Történet és programozás:</b> Dr. Porkoláb Ádám
-      <a href="https://www.adamporkolab.hu">https://www.adamporkolab.hu</a>,
-      <span aria-label="E-mail: ap kukac aporkolab pont com">ap kukac aporkolab pont com</span>
-    </div>
-    <br />
-    <div class="paragraph">
-      <b>Grafika, design:</b> Midjourney AI <a href="https://bit.ly/3gUQAqO">(https://bit.ly/3gUQAqO)</a>
-    </div>
-    <br />
+      <label for="contact-email">Válaszcím</label>
+      <input id="contact-email" type="email" formControlName="email" autocomplete="email" maxlength="254" />
 
-    <div class="paragraph">
-      <b>Kiindulásási HTML template:</b> Creative Tim <a href="https://bit.ly/3DKewWE">(https://bit.ly/3DKewWE)</a>
-    </div>
-    <br />
-    <div class="paragraph">
-      <b>Szövegekhez használt HTML template:</b> Baris Senkal
-      <a href="https://bit.ly/3DKoaZk">(https://bit.ly/3DKoaZk)</a>
-    </div>
-    <br />
-    <div class="paragraph">
-      <b>Forbidden (403) hibához használt HTML template:</b> Blissful Lemon
-      <a href="https://bit.ly/3sHZZEJ">(https://bit.ly/3sHZZEJ)</a>
-    </div>
-  </div>
-</body>
+      <label for="contact-subject">Tárgy</label>
+      <input id="contact-subject" type="text" formControlName="subject" maxlength="160" />
+
+      <label for="contact-message">Üzenet</label>
+      <textarea id="contact-message" formControlName="message" rows="8" minlength="20" maxlength="5000"></textarea>
+
+      <div class="trap" aria-hidden="true">
+        <label for="contact-website">Weboldal</label>
+        <input id="contact-website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p class="form-note">Az elküldéssel hozzájárulsz, hogy a válaszadáshoz feldolgozzuk az adatokat.</p>
+      <button type="submit" [disabled]="form.invalid || sending">
+        {{ sending ? 'Továbbítás…' : 'Üzenet küldése' }}
+      </button>
+    </form>
+
+    <div class="credits"><strong>Történet és programozás:</strong> Dr. Porkoláb Ádám · Hootie in Bootee Studio</div>
+  </section>
+</main>

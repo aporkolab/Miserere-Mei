@@ -204,6 +204,10 @@ docker build -t miserere-mei:test .
 | `SEED_DATABASE`                                           | üres játéktér kezdeti feltöltése                          | `true`                                  |
 | `SENTRY_DSN`                                              | opcionális Sentry hibakövetés                             | kikapcsolva                             |
 | `TRUST_PROXY`                                             | egy megbízható reverse proxy kezelése                     | `false`                                 |
+| `CONTACT_EMAIL`                                           | szerveroldali célcím; sosem kerül a frontendbe            | nincs                                   |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`    | kapcsolatfelvételi levéltovábbítás                        | nincs                                   |
+| `SMTP_FROM`, `SMTP_SECURE`                                | opcionális feladó és implicit TLS-mód                     | SMTP-fiók, `false`                      |
+| `SMTP_ALLOW_INSECURE`                                     | TLS nélküli SMTP explicit engedélyezése                   | `false`                                 |
 
 ## Szerepkörök és biztonság
 
@@ -292,7 +296,8 @@ A részletes kiadási lista a [CHANGELOG.md](CHANGELOG.md) fájlban található.
 ## Alkotók, források és kreditek
 
 **Írta, tervezte és fejlesztette:** Dr. Porkoláb Ádám<br> **Stúdió:** Hootie in
-Bootee Studio<br> **Kapcsolat:** `ap kukac aporkolab pont com`
+Bootee Studio<br> **Kapcsolat:** az alkalmazás szerveroldali kapcsolatfelvételi
+űrlapján
 
 Felhasznált vagy inspirációként szolgáló eszközök és források:
 

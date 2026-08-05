@@ -83,6 +83,13 @@ const loginLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many login attempts. Try again later.' },
 });
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: { error: 'Too many contact requests. Try again later.' },
+});
 
 // Autentikációs middleware
 const authenticateJwt = require('./models/auth/authenticate');
@@ -93,6 +100,7 @@ app.use('/place', require('./controllers/place/router'));
 app.use('/player', require('./controllers/player/router'));
 app.use('/users', authenticateJwt, require('./controllers/user/router'));
 app.use('/login', loginLimiter, require('./controllers/login/router'));
+app.use('/contact', contactLimiter, require('./controllers/contact/router'));
 
 app.get('/health', async (req, res, next) => {
   try {
