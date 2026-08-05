@@ -4,9 +4,24 @@ const cors = require('cors');
 const { rateLimit } = require('express-rate-limit');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const fs = require('fs');
+const client = require('prom-client');
+const Sentry = require('@sentry/node');
 const { sequelize } = require('./models');
 
 const app = express();
+if (process.env.SENTRY_DSN)
+  Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV });
+const register = new client.Registry();
+client.collectDefaultMetrics({ register });
+const requestDuration = new client.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'HTTP request duration in seconds',
+  labelNames: ['method', 'route', 'status'],
+  registers: [register],
+});
 
 // Cross Origin Resource Sharing (CORS) beállítás
 const allowedOrigins = (process.env.CORS_ORIGIN || '')
@@ -43,6 +58,23 @@ app.use(express.static('public'));
 
 // JSON kérések feldolgozása
 app.use(express.json({ limit: '100kb' }));
+app.use(cookieParser());
+app.use((req, res, next) => {
+  const end = requestDuration.startTimer();
+  res.once('finish', () =>
+    end({ method: req.method, route: req.route?.path || req.path, status: res.statusCode })
+  );
+  next();
+});
+app.use((req, res, next) => {
+  if (!['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) || !req.cookies.miserere_session)
+    return next();
+  const origin = req.get('origin');
+  const allowed = allowedOrigins.length ? allowedOrigins : [`${req.protocol}://${req.get('host')}`];
+  if (origin && !allowed.includes(origin))
+    return res.status(403).json({ hasError: true, message: 'Invalid request origin' });
+  return next();
+});
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -70,11 +102,37 @@ app.get('/health', async (req, res, next) => {
     return next(Object.assign(error, { status: 503 }));
   }
 });
+app.get('/ready', async (req, res, next) => {
+  try {
+    await sequelize.authenticate();
+    return res.json({ status: 'ready' });
+  } catch (error) {
+    return next(Object.assign(error, { status: 503 }));
+  }
+});
+app.get('/metrics', async (req, res) => {
+  res.type(register.contentType);
+  res.send(await register.metrics());
+});
 
 // Alapértelmezett útvonal a teszteléshez
 app.get('/', (req, res) => {
-  res.send('Miserere Mei backend is working.');
+  const indexFile = path.resolve(process.env.FRONTEND_DIR || 'public', 'index.html');
+  // The deployment path is administrator-controlled, never request-controlled.
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (fs.existsSync(indexFile)) return res.sendFile(indexFile);
+  return res.send('Miserere Mei backend is working.');
 });
+
+const frontendDir = path.resolve(process.env.FRONTEND_DIR || 'public');
+// eslint-disable-next-line security/detect-non-literal-fs-filename
+if (fs.existsSync(frontendDir)) {
+  app.use(express.static(frontendDir, { index: false, maxAge: '1y', immutable: true }));
+  app.get('*path', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    return res.sendFile(path.join(frontendDir, 'index.html'));
+  });
+}
 
 app.use((req, res) => res.status(404).json({ hasError: true, message: 'Not found' }));
 
@@ -83,6 +141,7 @@ app.use((err, req, res, _next) => {
   const status = err.status || err.statusCode || 500;
   if (status >= 500) {
     logger.error(err.stack || err.message);
+    if (process.env.SENTRY_DSN) Sentry.captureException(err);
   }
   res.status(status);
   res.json({

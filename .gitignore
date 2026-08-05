@@ -233,3 +233,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Runtime and generated QA artifacts
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+data/
+backups/

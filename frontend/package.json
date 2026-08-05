@@ -1,6 +1,6 @@
 {
   "name": "miserere-mei",
-  "version": "1.0.0",
+  "version": "1.7.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
@@ -15,7 +15,8 @@
     "lint": "tsc --noEmit -p tsconfig.app.json",
     "lint:fix": "echo 'Formatting frontend code...' && npx prettier --write src/**/*.{ts,html,scss,css}",
     "format": "prettier --write src/**/*.{ts,html,scss,css}",
-    "e2e": "ng e2e",
+    "e2e": "playwright test",
+    "e2e:update": "playwright test --update-snapshots",
     "security:audit": "npm audit --audit-level=moderate",
     "analyze": "ng build --configuration=production --stats-json && npx webpack-bundle-analyzer dist/miserere-mei/stats.json"
   },
@@ -50,6 +51,8 @@
     "@angular/build": "^22.1.3",
     "@angular/cli": "^22.1.3",
     "@angular/compiler-cli": "^22.1.0",
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.62.1",
     "@types/jasmine": "^6.0.0",
     "@types/node": "^26.1.2",
     "istanbul-lib-instrument": "^6.0.3",

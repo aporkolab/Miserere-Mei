@@ -2,11 +2,14 @@ require('dotenv').config();
 const logger = require('./logger/logger');
 const app = require('./server');
 const { sequelize } = require('./models');
+const migrate = require('./database/migrate');
+const seedDatabase = require('./seed/seeder');
 const port = process.env.PORT || 3000;
 
 async function start() {
   await sequelize.authenticate();
-  await sequelize.sync();
+  await migrate();
+  if (process.env.SEED_DATABASE === 'true') await seedDatabase();
   const server = app.listen(port, () => {
     logger.info(`App listening at http://localhost:${port}`);
   });

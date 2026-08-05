@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.7.0] - 2026-08-05
+
+### Added
+
+- Egyetlen image-es Angular, Express és SQLite production futtatás.
+- Verziózott Umzug migráció és idempotens kezdeti adatfeltöltés.
+- Playwright E2E, mobil/desktop vizuális regresszió és Axe WCAG kapu.
+- Prometheus metrikák, readiness és opcionális Sentry hibakövetés.
+- Staging/production immutable deploy, smoke test és rollback workflow.
+- Ellenőrzőösszeges backup és integritásvizsgált restore runbook.
+
+### Changed
+
+- A hitelesítés HttpOnly, Secure, SameSite cookie-ra és origin-védelemre
+  váltott.
+- A CI fail-fast minőségkapukkal és egységes container builddel működik.
+- A teljes dokumentáció az 1.7 architektúrához igazodik.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

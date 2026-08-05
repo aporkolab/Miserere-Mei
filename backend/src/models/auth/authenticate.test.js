@@ -36,6 +36,20 @@ describe('JWT authentication', () => {
     expect(next).toHaveBeenCalledWith();
   });
 
+  test('accepts a valid HttpOnly session cookie token', async () => {
+    const { SignJWT } = await import('jose');
+    const token = await new SignJWT({ id: 2, role: 3 })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuer('miserere-api')
+      .setAudience('miserere-web')
+      .sign(new TextEncoder().encode(process.env.JWT_SECRET));
+    const req = { headers: {}, cookies: { miserere_session: token } };
+    const next = jest.fn();
+    await authenticate(req, response(), next);
+    expect(req.user).toEqual(expect.objectContaining({ id: 2, role: 3 }));
+    expect(next).toHaveBeenCalledWith();
+  });
+
   test('passes missing server configuration to error handling', async () => {
     delete process.env.JWT_SECRET;
     const next = jest.fn();

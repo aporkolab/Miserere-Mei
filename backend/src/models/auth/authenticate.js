@@ -7,14 +7,16 @@ const getJwtSecret = () => {
 
 module.exports = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+  const cookieToken = req.cookies?.miserere_session;
 
-  if (!authHeader) {
+  if (!authHeader && !cookieToken) {
     return res.status(401).json({
       message: 'Authorization header is missing',
     });
   }
 
-  const [scheme, token] = authHeader.split(' ');
+  const [scheme, bearerToken] = authHeader ? authHeader.split(' ') : ['Bearer', cookieToken];
+  const token = cookieToken || bearerToken;
   if (scheme !== 'Bearer' || !token) {
     return res.status(401).json({
       message: 'Authorization header must use the Bearer scheme',

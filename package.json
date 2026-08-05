@@ -1,6 +1,6 @@
 {
   "name": "miserere-mei",
-  "version": "1.0.3",
+  "version": "1.7.0",
   "description": "Miserere Mei - The Precarious Trails to the Library of Preachers",
   "scripts": {
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
@@ -34,6 +34,9 @@
     "docker:prod": "docker-compose up -d",
     "docker:prod:down": "docker-compose down",
     "docker:build": "docker-compose build",
+    "docker:quickstart": "docker compose up --build",
+    "backup": "sh scripts/backup.sh",
+    "restore": "sh scripts/restore.sh",
     "security:audit": "npm audit && cd backend && npm audit && cd ../frontend && npm audit",
     "prepare": "husky"
   },

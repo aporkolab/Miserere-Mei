@@ -61,7 +61,6 @@ import { BattleComponent } from './page/battle/battle.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
-      deps: [AuthService],
       multi: true,
     },
   ],

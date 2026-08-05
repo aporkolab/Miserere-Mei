@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
+const authenticate = require('../../models/auth/authenticate');
 const DUMMY_PASSWORD_HASH = '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
 router.post('/', async (req, res, next) => {
@@ -44,8 +45,14 @@ router.post('/', async (req, res, next) => {
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));
 
     res.set('Cache-Control', 'no-store');
+    res.cookie('miserere_session', accessToken, {
+      httpOnly: true,
+      secure: process.env.COOKIE_SECURE !== 'false' && process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+      path: '/',
+    });
     return res.json({
-      accessToken,
       user: {
         id: user.id,
         email: user.email,
@@ -57,6 +64,22 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+});
+
+router.get('/session', authenticate, async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) return res.status(401).json({ error: 'Session user no longer exists' });
+    res.set('Cache-Control', 'no-store');
+    return res.json({ user });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post('/logout', (_req, res) => {
+  res.clearCookie('miserere_session', { httpOnly: true, sameSite: 'strict', path: '/' });
+  return res.status(204).end();
 });
 
 module.exports = router;
