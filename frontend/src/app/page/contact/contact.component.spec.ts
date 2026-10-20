@@ -27,6 +27,6 @@ describe('ContactComponent', () => {
 
   it('rejects an incomplete message', () => {
     component.form.patchValue({ name: 'Teszt', email: 'not-an-email', subject: 'Tárgy' });
-    expect(component.form.invalid).toBeTrue();
+    expect(component.form.invalid).toBe(true);
   });
 });
