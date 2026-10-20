@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon --inspect=0.0.0.0:9229 src/server.js",
+    "dev": "node --watch --inspect=0.0.0.0:9229 src/server.js",
     "build": "echo 'No build step required for Node.js backend'",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
@@ -55,8 +55,10 @@
     "eslint-plugin-promise": "^7.3.0",
     "eslint-plugin-security": "^4.0.1",
     "jest": "^30.4.2",
-    "nodemon": "^3.1.14",
     "sequelize-cli": "^6.6.5",
     "supertest": "^7.2.2"
+  },
+  "engines": {
+    "node": "^24.15.0"
   }
 }

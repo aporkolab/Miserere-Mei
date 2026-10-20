@@ -24,12 +24,23 @@
               "base": "dist/miserere-mei",
               "browser": ""
             },
-            "allowedCommonJsDependencies": ["core-js/es/array/from", "core-js/es/map", "core-js/es/object/assign", "core-js/es/set", "core-js/es/weak-map"],
+            "allowedCommonJsDependencies": [
+              "core-js/es/array/from",
+              "core-js/es/map",
+              "core-js/es/object/assign",
+              "core-js/es/set",
+              "core-js/es/weak-map"
+            ],
             "index": "src/index.html",
-            "polyfills": ["src/polyfills.ts"],
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "src/styles.scss",
               "src/assets/css/nucleo-icons.css",
@@ -75,6 +86,9 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "testing": {
+              "polyfills": []
             }
           },
           "defaultConfiguration": "production"
@@ -98,23 +112,23 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": ["src/polyfills.ts"],
+            "runner": "vitest",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss", "src/assets/css/nucleo-icons.css", "node_modules/font-awesome/css/font-awesome.min.css"],
-            "scripts": []
+            "coverageReporters": [
+              "text",
+              "lcov",
+              "html"
+            ],
+            "buildTarget": "MiserereMei:build:testing"
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "5e1fa17e-f6f5-407e-a2b1-86952b8ada73"
+    "analytics": false
   },
   "schematics": {
     "@schematics/angular:component": {
