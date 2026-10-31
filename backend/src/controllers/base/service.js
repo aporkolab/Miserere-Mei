@@ -40,7 +40,10 @@ module.exports = (
       if (!entity) {
         throw new Error('Not found');
       }
-      return entity.update(prepareWrite(pickAllowedFields(updateData, writableFields)));
+      await entity.update(prepareWrite(pickAllowedFields(updateData, writableFields)));
+      // Re-read through the default scope so hook-mutated hidden fields (e.g. password hashes)
+      // never leak into the response.
+      return model.findByPk(id);
     },
     create: async body => {
       const newEntity = await model.create(prepareWrite(pickAllowedFields(body, writableFields)));
