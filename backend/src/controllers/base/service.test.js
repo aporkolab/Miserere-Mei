@@ -1,13 +1,16 @@
 const baseService = require('./service');
 
 describe('base service', () => {
-  test('updates and returns the entity on MySQL-compatible models', async () => {
-    const updated = { id: 7, name: 'after' };
-    const entity = { update: jest.fn().mockResolvedValue(updated) };
-    const model = { findByPk: jest.fn().mockResolvedValue(entity) };
+  test('updates and returns the freshly re-read entity', async () => {
+    const reloaded = { id: 7, name: 'after' };
+    const entity = { update: jest.fn().mockResolvedValue({ ...reloaded, password: 'hash' }) };
+    const model = {
+      findByPk: jest.fn().mockResolvedValueOnce(entity).mockResolvedValueOnce(reloaded),
+    };
 
-    await expect(baseService(model).update(7, { name: 'after' })).resolves.toBe(updated);
+    await expect(baseService(model).update(7, { name: 'after' })).resolves.toBe(reloaded);
     expect(entity.update).toHaveBeenCalledWith({ name: 'after' });
+    expect(model.findByPk).toHaveBeenCalledTimes(2);
   });
 
   test('rejects updates for missing entities', async () => {

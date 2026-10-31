@@ -1,6 +1,17 @@
 const createError = require('http-errors');
 const baseService = require('./service');
 
+const toHttpError = (err, fallback = createError.InternalServerError) => {
+  if (err.message === 'Not found') return new createError.NotFound(err.message);
+  if (err.name === 'SequelizeUniqueConstraintError') {
+    return new createError.Conflict('Entity violates a unique constraint');
+  }
+  if (err.name === 'SequelizeValidationError') {
+    return new createError.BadRequest(err.errors?.map(e => e.message).join('; ') || err.message);
+  }
+  return new fallback(err.message);
+};
+
 module.exports = (model, options = {}) => {
   const service = baseService(model, options);
   const idFrom = req => {
@@ -55,18 +66,13 @@ module.exports = (model, options = {}) => {
       return service
         .update(id, req.body)
         .then(entity => res.json(entity))
-        .catch(err => {
-          if (err.message === 'Not found') {
-            return next(new createError.NotFound(err.message));
-          }
-          return next(new createError.InternalServerError(err.message));
-        });
+        .catch(err => next(toHttpError(err)));
     },
     create(req, res, next) {
       return service
         .create(req.body)
         .then(entity => res.status(201).json(entity))
-        .catch(err => next(new createError.BadRequest(err.message)));
+        .catch(err => next(toHttpError(err)));
     },
     delete(req, res, next) {
       let id;
@@ -78,12 +84,7 @@ module.exports = (model, options = {}) => {
       return service
         .delete(id)
         .then(() => res.status(204).send())
-        .catch(err => {
-          if (err.message === 'Not found') {
-            return next(new createError.NotFound(err.message));
-          }
-          next(new createError.InternalServerError(err.message));
-        });
+        .catch(err => next(toHttpError(err)));
     },
   };
 };
