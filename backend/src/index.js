@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const logger = require('./logger/logger');
 const app = require('./server');
 const { sequelize } = require('./models');
