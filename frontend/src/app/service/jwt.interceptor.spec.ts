@@ -1,16 +1,23 @@
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { JwtInterceptor } from './jwt.interceptor';
+import { credentialsInterceptor } from './jwt.interceptor';
 
-describe('JwtInterceptor', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      JwtInterceptor
-      ]
-  }));
+describe('credentialsInterceptor', () => {
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(withInterceptors([credentialsInterceptor])),
+        provideHttpClientTesting(),
+      ],
+    })
+  );
 
-  it('should be created', () => {
-    const interceptor: JwtInterceptor = TestBed.inject(JwtInterceptor);
-    expect(interceptor).toBeTruthy();
+  it('sends cookies with every request', () => {
+    TestBed.inject(HttpClient).get('/api/test').subscribe();
+    const request = TestBed.inject(HttpTestingController).expectOne('/api/test');
+    expect(request.request.withCredentials).toBe(true);
+    request.flush({});
   });
 });
