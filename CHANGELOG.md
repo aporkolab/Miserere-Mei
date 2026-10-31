@@ -1,5 +1,28 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Függőségfrissítés: Angular 22.2.4 / CLI 22.2.5, Sentry 11, ESLint 10, dotenv
+  18, Express 5.3; a GitHub Actions lépések aktuális főverziókra kerültek (a
+  Node 20-as runtime kivezetése miatt).
+- A frontend standalone bootstrapre, `inject()`-re, funkcionális HTTP
+  interceptorra és `takeUntilDestroyed` leiratkozásra állt át.
+
+### Fixed
+
+- A `PUT/PATCH /users/select/:id` válasza már nem tartalmazza a jelszó-hash-t.
+- Validációs hibára 400, egyediség-sértésre 409 érkezik 500 helyett.
+- A gyógyszer és az AK-47 hatása csak akkor érvényesül, ha a tárgy tényleg az
+  inventoryban van.
+- A GameOver képernyőről a játék ismét újraindul.
+
+### Added
+
+- Backend integrációs tesztek (lefedettség ~18% → ~92%) és frontend tesztek az
+  auth-folyamatra, guardokra, HTTP-szervizekre és a harcrendszerre.
+
 ## [1.7.0] - 2026-08-05
 
 ### Added

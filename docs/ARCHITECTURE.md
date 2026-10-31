@@ -21,11 +21,13 @@ szükséges; SQLite volume nem osztható biztonságosan több író között.
 
 ## Frontend
 
-Az Angular kliens moduláris oldal-, komponens-, modell- és service-rétegekből
-áll. A production API URL azonos origin (`''`), ezért nincs környezetspecifikus
-API-host a bundle-ben. A globális interceptor `withCredentials` módban küldi a
-cookie-t. A kliens nem fér hozzá tokenhez és nem tárol hitelesítési adatot Web
-Storage-ban.
+Az Angular kliens standalone komponensekből, oldal-, modell- és
+service-rétegekből áll; `bootstrapApplication` indítja az `app.config.ts`
+providereivel, az útvonalakat az `app.routes.ts` írja le, a függőségeket
+`inject()` adja. A production API URL azonos origin (`''`), ezért nincs
+környezetspecifikus API-host a bundle-ben. A funkcionális
+`credentialsInterceptor` `withCredentials` módban küldi a cookie-t. A kliens nem
+fér hozzá tokenhez és nem tárol hitelesítési adatot Web Storage-ban.
 
 ## Backend
 
@@ -59,7 +61,8 @@ orchestrator nem irányít forgalmat hibás adatbázisú példányra.
 
 ## Minőségkapuk
 
-Jest és Karma/Jasmine adja a unit teszteket; Playwright Chromium desktop és
-mobil profilon E2E-t és képi baseline-t futtat; Axe WCAG 2 A/AA/2.1 AA hibákra
-bukik. A CI auditálja mindhárom lockfile-t és külön felépíti a production
-containert.
+A backendet Jest és supertest teszteli (memóriabeli SQLite-on futó integrációs
+tesztekkel, 80%-os lefedettségi küszöbbel), a frontendet az Angular unit-test
+buildere Vitesttel; Playwright Chromium desktop és mobil profilon E2E-t és képi
+baseline-t futtat; Axe WCAG 2 A/AA/2.1 AA hibákra bukik. A CI auditálja
+mindhárom lockfile-t és külön felépíti a production containert.
