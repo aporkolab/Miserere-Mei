@@ -166,12 +166,15 @@ docker run --rm -p 8080:8080 -v miserere-data:/data \
 
 ## Fejlesztői környezet
 
-Előfeltétel: Node.js 24 és npm 10+.
+Előfeltétel: Node.js 24 (`.nvmrc`) és npm 10+. A fő eszközverziók: Angular 22.2,
+TypeScript 6.0, Vitest 5, Playwright 1.64, Express 5.3, Sequelize 6, Jest 30,
+ESLint 10 és Sentry 11.
 
 ```bash
 npm ci
 npm ci --prefix backend
 npm ci --prefix frontend
+npx --prefix frontend playwright install chromium
 npm start
 ```
 
@@ -189,6 +192,11 @@ npm run security:audit
 docker build -t miserere-mei:test .
 ```
 
+A `npm run test:ci` lefedettségi riportot is készít; a backend 80%-os globális
+küszöb alatt bukik. A backend integrációs tesztjei memóriabeli SQLite-on,
+supertesttel futtatják a teljes Express alkalmazást, ezért nem kell hozzájuk
+külön adatbázis.
+
 ## Konfiguráció
 
 | Változó                                                   | Jelentés                                                  | Egykonténeres alapérték                 |
@@ -204,6 +212,9 @@ docker build -t miserere-mei:test .
 | `SEED_DATABASE`                                           | üres játéktér kezdeti feltöltése                          | `true`                                  |
 | `SENTRY_DSN`                                              | opcionális Sentry hibakövetés                             | kikapcsolva                             |
 | `TRUST_PROXY`                                             | egy megbízható reverse proxy kezelése                     | `false`                                 |
+| `PORT`                                                    | HTTP port                                                 | `8080` (fejlesztésben `3000`)           |
+| `FRONTEND_DIR`                                            | a kiszolgált Angular build könyvtára                      | `/app/public`                           |
+| `LOG_LEVEL`                                               | Winston naplózási szint                                   | `info`                                  |
 | `CONTACT_EMAIL`                                           | szerveroldali célcím; sosem kerül a frontendbe            | nincs                                   |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`    | kapcsolatfelvételi levéltovábbítás                        | nincs                                   |
 | `SMTP_FROM`, `SMTP_SECURE`                                | opcionális feladó és implicit TLS-mód                     | SMTP-fiók, `false`                      |
