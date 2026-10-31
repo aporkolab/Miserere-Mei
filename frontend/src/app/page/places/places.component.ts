@@ -1,67 +1,74 @@
 import { PlaceService } from './../../service/place.service';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+  DestroyRef,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { Place } from 'src/app/model/place';
 import { NotificationService } from 'src/app/service/notification.service';
+import { Item } from 'src/app/model/item';
 import { BattleService } from 'src/app/service/battle.service';
+import { PlayerComponent } from '../battle/player/player.component';
+import { BattleComponent } from '../battle/battle.component';
 
 @Component({
   selector: 'app-places',
   templateUrl: './places.component.html',
   styleUrls: ['./places.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [PlayerComponent, BattleComponent],
 })
-export class PlacesComponent implements OnInit {
+export class PlacesComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+  private notifyService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private document = inject(DOCUMENT);
+  placeService = inject(PlaceService);
+  data = inject(BattleService);
+
   private gameOverTimer?: ReturnType<typeof setTimeout>;
   currentPlace!: Place;
 
   monsterName = '';
 
-  monsterSubscription!: Subscription;
   inBattle!: boolean;
-  inBattleSubscription!: Subscription;
   monsterMinDamage = 0;
   monsterMaxDamage = 0;
   monsterHealth = 0;
-  monsterMinDamageSubscription!: Subscription;
-  monsterMaxDamageSubscription!: Subscription;
-  monsterHealthSubscription!: Subscription;
 
-  inventory!: any[];
-  inventorySubscription!: Subscription;
-
-  constructor(
-    private notifyService: NotificationService,
-    private route: ActivatedRoute,
-    private router: Router,
-    public placeService: PlaceService,
-    public data: BattleService
-  ) {}
+  inventory: Item[] = [];
 
   ngOnInit(): void {
-    const location = this.route.snapshot.params['location'];
-    if (location) this.getPlace(location);
-    this.monsterMinDamageSubscription = this.data.currentMinDamage.subscribe(
-      monsterMinDamage => (this.monsterMinDamage = monsterMinDamage)
-    );
-    this.monsterMaxDamageSubscription = this.data.currentMaxDamage.subscribe(
-      monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage)
-    );
-    this.monsterHealthSubscription = this.data.currentMonsterHealth.subscribe(
-      monsterHealth => (this.monsterHealth = monsterHealth)
-    );
-    this.monsterSubscription = this.data.currentMessage.subscribe(
-      message => (this.monsterName = message)
-    );
-    this.inBattleSubscription = this.data.currentBattleState.subscribe(
-      (state: boolean) => (this.inBattle = state)
-    );
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      const location = params.get('location');
+      if (location) this.getPlace(location);
+    });
+    this.data.currentMinDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterMinDamage => (this.monsterMinDamage = monsterMinDamage));
+    this.data.currentMaxDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage));
+    this.data.currentMonsterHealth
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterHealth => (this.monsterHealth = monsterHealth));
+    this.data.currentMessage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(message => (this.monsterName = message));
+    this.data.currentBattleState
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((state: boolean) => (this.inBattle = state));
 
-    this.inventorySubscription = this.data.currentPlayerInventory.subscribe(
-      inventory => (this.inventory = inventory)
-    );
+    this.data.currentPlayerInventory
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(inventory => (this.inventory = inventory));
   }
 
   getPlace(location: string): void {
@@ -86,9 +93,7 @@ export class PlacesComponent implements OnInit {
         }
 
         if (this.currentPlace.location === 'GameOver') {
-          this.gameOverTimer = setTimeout(() => {
-            this.router.navigate(['/place', 'GameBeginning']);
-          }, 3000);
+          this.gameOverTimer = setTimeout(() => this.restartGame(), 3000);
         }
       },
       error: () =>
@@ -96,13 +101,18 @@ export class PlacesComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
+  /**
+   * Story navigation happens in-component, so the URL usually still reads /place/GameBeginning.
+   * A plain router.navigate() to that URL is ignored; reload to also reset the player state,
+   * mirroring what happens when Cantus dies in battle.
+   */
+  restartGame(): void {
+    void this.router
+      .navigateByUrl('/place/GameBeginning')
+      .then(() => this.document.location.reload());
+  }
+
+  ngOnDestroy(): void {
     if (this.gameOverTimer) clearTimeout(this.gameOverTimer);
-    this.monsterSubscription.unsubscribe();
-    this.inBattleSubscription.unsubscribe();
-    this.monsterMinDamageSubscription.unsubscribe();
-    this.monsterMaxDamageSubscription.unsubscribe();
-    this.monsterHealthSubscription.unsubscribe();
-    this.inventorySubscription.unsubscribe();
   }
 }
