@@ -3,12 +3,14 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  OnDestroy,
   Output,
   ChangeDetectionStrategy,
+  inject,
+  DestroyRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { INgxTableColumn } from 'src/app/common/data-table/ngx-data-table/ngx-data-table.component';
 import { Place } from 'src/app/model/place';
 import { Player } from 'src/app/model/player';
@@ -22,9 +24,16 @@ import { PlayerService } from 'src/app/service/player.service';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
-  standalone: false,
 })
-export class PlayerComponent implements OnInit, OnDestroy {
+export class PlayerComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private notifyService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  placeService = inject(PlaceService);
+  playerService = inject(PlayerService);
+  data = inject(BattleService);
+
   // @Output() selectOne: EventEmitter<Player> = new EventEmitter<Player>();
   public player$!: Observable<Player>;
   @Output()
@@ -35,20 +44,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
   playerMaxDamage!: number;
   playerHealth!: number;
   playerBulletsNumber!: number;
-  playerMinDamageSubscription!: Subscription;
-  playerMaxDamageSubscription!: Subscription;
-  playerHealthSubscription!: Subscription;
-  playerWeaponSubscription!: Subscription;
-  playerBulletsNumberSubscription!: Subscription;
 
   monsterName!: string;
-  subscription!: Subscription;
   monsterMinDamage!: number;
   monsterMaxDamage!: number;
   monsterHealth!: number;
-  monsterMinDamageSubscription!: Subscription;
-  monsterMaxDamageSubscription!: Subscription;
-  monsterHealthSubscription!: Subscription;
 
   inventory = [
     {
@@ -65,61 +65,37 @@ export class PlayerComponent implements OnInit, OnDestroy {
     },
   ];
 
-  inventorySubscription!: Subscription;
-
-  constructor(
-    private notifyService: NotificationService,
-    private route: ActivatedRoute,
-    private router: Router,
-    public placeService: PlaceService,
-    public playerService: PlayerService,
-    public data: BattleService
-  ) {}
-
   ngOnInit(): void {
-    this.subscription = this.data.currentMessage.subscribe(
-      monsterName => (this.monsterName = monsterName)
-    );
-    this.monsterMinDamageSubscription = this.data.currentMinDamage.subscribe(
-      monsterMinDamage => (this.monsterMinDamage = monsterMinDamage)
-    );
-    this.monsterMaxDamageSubscription = this.data.currentMaxDamage.subscribe(
-      monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage)
-    );
-    this.monsterHealthSubscription = this.data.currentMonsterHealth.subscribe(
-      monsterHealth => (this.monsterHealth = monsterHealth)
-    );
-    this.playerHealthSubscription = this.data.currentPlayerHealth.subscribe(
-      playerHealth => (this.playerHealth = playerHealth)
-    );
-    this.playerMinDamageSubscription = this.data.currentPlayerMinDamage.subscribe(
-      playerMinDamage => (this.playerMinDamage = playerMinDamage)
-    );
-    this.playerMaxDamageSubscription = this.data.currentPlayerMaxDamage.subscribe(
-      playerMaxDamage => (this.playerMaxDamage = playerMaxDamage)
-    );
-    this.playerBulletsNumberSubscription = this.data.currentPlayerBulletsNumber.subscribe(
-      playerBulletsNumber => (this.playerBulletsNumber = playerBulletsNumber)
-    );
-    this.playerWeaponSubscription = this.data.currentWeapon.subscribe(
-      weaponName => (this.weaponName = weaponName)
-    );
+    this.data.currentMessage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterName => (this.monsterName = monsterName));
+    this.data.currentMinDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterMinDamage => (this.monsterMinDamage = monsterMinDamage));
+    this.data.currentMaxDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage));
+    this.data.currentMonsterHealth
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterHealth => (this.monsterHealth = monsterHealth));
+    this.data.currentPlayerHealth
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerHealth => (this.playerHealth = playerHealth));
+    this.data.currentPlayerMinDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerMinDamage => (this.playerMinDamage = playerMinDamage));
+    this.data.currentPlayerMaxDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerMaxDamage => (this.playerMaxDamage = playerMaxDamage));
+    this.data.currentPlayerBulletsNumber
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerBulletsNumber => (this.playerBulletsNumber = playerBulletsNumber));
+    this.data.currentWeapon
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(weaponName => (this.weaponName = weaponName));
     this.data.changePlayerInventory(this.inventory);
-    this.inventorySubscription = this.data.currentPlayerInventory.subscribe(
-      inventory => (this.inventory = inventory)
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.monsterMinDamageSubscription.unsubscribe();
-    this.monsterMaxDamageSubscription.unsubscribe();
-    this.monsterHealthSubscription.unsubscribe();
-    this.playerHealthSubscription.unsubscribe();
-    this.playerMinDamageSubscription.unsubscribe();
-    this.playerMaxDamageSubscription.unsubscribe();
-    this.playerBulletsNumberSubscription.unsubscribe();
-    this.playerWeaponSubscription.unsubscribe();
-    this.inventorySubscription.unsubscribe();
+    this.data.currentPlayerInventory
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(inventory => (this.inventory = inventory));
   }
 }

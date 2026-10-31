@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/service/notification.service';
@@ -10,9 +10,13 @@ import { NotificationService } from 'src/app/service/notification.service';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FormsModule, ReactiveFormsModule],
 })
 export class ContactComponent {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly http = inject(HttpClient);
+  private readonly notifications = inject(NotificationService);
+
   sending = false;
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -21,12 +25,6 @@ export class ContactComponent {
     message: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(5000)]],
     website: [''],
   });
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly http: HttpClient,
-    private readonly notifications: NotificationService
-  ) {}
 
   submit(): void {
     this.form.markAllAsTouched();

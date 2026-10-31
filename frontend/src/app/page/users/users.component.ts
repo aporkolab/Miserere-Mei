@@ -1,29 +1,29 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { ConfigService } from 'src/app/service/config.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { UserService } from 'src/app/service/user.service';
 import { Observable } from 'rxjs';
+import { NgxDataTableComponent } from '../../common/data-table/ngx-data-table/ngx-data-table.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [NgxDataTableComponent, AsyncPipe],
 })
 export class UsersComponent {
+  private config = inject(ConfigService);
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+
   columns = this.config.usersTableColumn;
   list$: Observable<User[]> = this.userService.getAll();
   entity = 'User';
-
-  constructor(
-    private config: ConfigService,
-    private userService: UserService,
-    private router: Router,
-    private notifyService: NotificationService
-  ) {}
 
   // ngOnInit elhagyható, ha nincs más inicializálási logika
   // ngOnInit(): void {}

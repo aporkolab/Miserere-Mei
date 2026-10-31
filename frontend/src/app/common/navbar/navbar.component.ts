@@ -1,19 +1,21 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AuthService } from 'src/app/service/auth.service';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [RouterLink, AsyncPipe],
 })
 export class NavbarComponent implements OnInit {
+  auth = inject(AuthService);
+
   user$ = this.auth.user$;
   public isCollapsed = false;
   mobile: boolean = false;
-
-  constructor(public auth: AuthService) {}
 
   ngOnInit(): void {
     if (window.screen.width <= 390) {

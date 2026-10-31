@@ -1,17 +1,19 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AuthService, ILoginData } from 'src/app/service/auth.service';
+import { FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FormsModule, NgClass],
 })
 export class LoginComponent implements OnInit {
-  loginData: ILoginData = { email: '', password: '' };
+  private auth = inject(AuthService);
 
-  constructor(private auth: AuthService) {}
+  loginData: ILoginData = { email: '', password: '' };
 
   ngOnInit(): void {
     this.auth.logout();

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrefaceComponent } from './preface.component';
+import { testProviders } from '../../../testing/test-providers';
 
 describe('PrefaceComponent', () => {
   let component: PrefaceComponent;
@@ -8,9 +9,9 @@ describe('PrefaceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrefaceComponent ]
-    })
-    .compileComponents();
+      imports: [PrefaceComponent],
+      providers: testProviders,
+    }).compileComponents();
   });
 
   beforeEach(() => {

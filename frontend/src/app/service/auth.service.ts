@@ -1,6 +1,6 @@
 import { User } from './../model/user';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -20,6 +20,10 @@ export interface ILoginData {
   providedIn: 'root',
 })
 export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private notifications = inject(NotificationService);
+
   private readonly apiUrl = environment.apiUrl;
   private readonly loginUrl = `${this.apiUrl}/login`;
 
@@ -28,11 +32,7 @@ export class AuthService {
   private readonly readySubject = new BehaviorSubject<boolean>(false);
   ready$ = this.readySubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private notifications: NotificationService
-  ) {
+  constructor() {
     this.restoreSession();
   }
 

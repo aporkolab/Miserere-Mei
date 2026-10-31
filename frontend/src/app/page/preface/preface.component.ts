@@ -5,7 +5,6 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './preface.component.html',
   styleUrls: ['./preface.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class PrefaceComponent implements OnInit {
   constructor() {}

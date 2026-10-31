@@ -1,7 +1,18 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { NotificationService } from 'src/app/service/notification.service';
+import { FormsModule } from '@angular/forms';
+import { AsyncPipe, SlicePipe } from '@angular/common';
+import { FilterPipe } from 'src/app/pipe/filter.pipe';
+import { SorterPipe } from 'src/app/pipe/sorter.pipe';
 
 export interface INgxTableColumn {
   title: string;
@@ -13,9 +24,13 @@ export interface INgxTableColumn {
   templateUrl: './ngx-data-table.component.html',
   styleUrls: ['./ngx-data-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FormsModule, RouterLink, AsyncPipe, SlicePipe, FilterPipe, SorterPipe],
 })
 export class NgxDataTableComponent<T extends Record<string, unknown>> {
+  private notifyService = inject(NotificationService);
+  auth = inject(AuthService);
+  router = inject(Router);
+
   @Input() list: T[] = [];
   @Input() columns: INgxTableColumn[] = [];
   @Input() entity: string = '';
@@ -40,12 +55,6 @@ export class NgxDataTableComponent<T extends Record<string, unknown>> {
 
   columnKey: string = '';
   sortDir: number = -1;
-
-  constructor(
-    private notifyService: NotificationService,
-    public auth: AuthService,
-    public router: Router
-  ) {}
 
   get isAdmin(): boolean {
     return this.auth.currentUser?.role === 3;

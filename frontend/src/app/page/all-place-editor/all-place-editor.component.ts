@@ -1,28 +1,28 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Place } from 'src/app/model/place';
 import { AllPlaceService } from 'src/app/service/allplace.service';
 import { NotificationService } from 'src/app/service/notification.service';
+import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-all-place-editor',
   templateUrl: './all-place-editor.component.html',
   styleUrls: ['./all-place-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FormsModule, RouterLink, AsyncPipe],
 })
 export class AllPlaceEditorComponent implements OnInit {
+  private allPlaceService = inject(AllPlaceService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+
   allplace$!: Observable<Place>;
   allplace: Place = new Place();
   entity = 'allplace';
-
-  constructor(
-    private allPlaceService: AllPlaceService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifyService: NotificationService
-  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe({
