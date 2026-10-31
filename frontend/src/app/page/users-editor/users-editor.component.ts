@@ -1,28 +1,28 @@
 import { UserService } from 'src/app/service/user.service';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { User } from 'src/app/model/user';
 import { NotificationService } from 'src/app/service/notification.service';
+import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-users-editor',
   templateUrl: './users-editor.component.html',
   styleUrls: ['./users-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [FormsModule, RouterLink, AsyncPipe],
 })
 export class UsersEditorComponent implements OnInit {
+  private userService = inject(UserService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+
   user$!: Observable<User>;
   user: User = new User();
   entity = 'Users';
-
-  constructor(
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifyService: NotificationService
-  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe({

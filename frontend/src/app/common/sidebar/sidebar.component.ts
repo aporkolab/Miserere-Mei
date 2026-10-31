@@ -1,15 +1,17 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AuthService } from 'src/app/service/auth.service';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [RouterLink, RouterLinkActive, AsyncPipe],
 })
 export class SidebarComponent implements OnInit {
-  constructor(public auth: AuthService) {}
+  auth = inject(AuthService);
 
   ngOnInit(): void {}
 }

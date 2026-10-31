@@ -1,30 +1,30 @@
 import { AllPlaceService } from './../../service/allplace.service';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AllPlace } from 'src/app/model/allplace';
 import { ConfigService } from 'src/app/service/config.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { Place } from 'src/app/model/place';
+import { NgxDataTableComponent } from '../../common/data-table/ngx-data-table/ngx-data-table.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-all-place-viewer',
   templateUrl: './all-place-viewer.component.html',
   styleUrls: ['./all-place-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [NgxDataTableComponent, AsyncPipe],
 })
 export class AllPlaceViewerComponent implements OnInit {
+  private config = inject(ConfigService);
+  private allPlaceService = inject(AllPlaceService);
+  private router = inject(Router);
+  private notifyService = inject(NotificationService);
+
   columns = this.config.placesTableColumns;
   list$: Observable<AllPlace[]> = this.allPlaceService.getAll();
   entity = 'allplace';
-
-  constructor(
-    private config: ConfigService,
-    private allPlaceService: AllPlaceService,
-    private router: Router,
-    private notifyService: NotificationService
-  ) {}
 
   ngOnInit(): void {}
 

@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-    name: 'sorter',
-    standalone: false
-})
+@Pipe({ name: 'sorter' })
 export class SorterPipe implements PipeTransform {
   transform(value: any[] | null, key: string, dir: number = 1): any[] | null {
     if (!Array.isArray(value) || !key || ![1, -1].includes(dir)) {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UsersEditorComponent } from './users-editor.component';
-import { AppModule } from '../../app.module';
+import { testProviders } from '../../../testing/test-providers';
 
 describe('UsersEditorComponent', () => {
   let component: UsersEditorComponent;
@@ -9,7 +9,8 @@ describe('UsersEditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [UsersEditorComponent],
+      providers: testProviders,
     }).compileComponents();
   });
 

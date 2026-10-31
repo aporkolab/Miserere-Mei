@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ConfigService } from './config.service';
@@ -8,14 +8,12 @@ import { ConfigService } from './config.service';
   providedIn: 'root',
 })
 export class BaseService<T extends { id: string | number; [key: string]: unknown }> {
+  private http = inject(HttpClient);
+  config = inject(ConfigService);
+
   apiUrl: string = environment.apiUrl;
   entity: string = '';
   list$: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
-
-  constructor(
-    private http: HttpClient,
-    public config: ConfigService
-  ) {}
 
   getAll(): Observable<T[]> {
     return this.http.get<T[]>(`${this.apiUrl}/${this.entity}`);

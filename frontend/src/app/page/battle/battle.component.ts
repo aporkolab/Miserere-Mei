@@ -1,11 +1,13 @@
 import { Player } from 'src/app/model/player';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from 'src/app/service/notification.service';
 import { PlaceService } from 'src/app/service/place.service';
 import { PlayerService } from 'src/app/service/player.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Enemy } from 'src/app/model/enemy';
+import { Item } from 'src/app/model/item';
 import { BattleService } from 'src/app/service/battle.service';
 
 @Component({
@@ -13,9 +15,16 @@ import { BattleService } from 'src/app/service/battle.service';
   templateUrl: './battle.component.html',
   styleUrls: ['./battle.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
-export class BattleComponent implements OnInit, OnDestroy {
+export class BattleComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private notifyService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  placeService = inject(PlaceService);
+  playerService = inject(PlayerService);
+  private data = inject(BattleService);
+
   player$!: Observable<Player>;
   player: Player = new Player();
   enemy$!: Observable<Enemy>;
@@ -27,11 +36,6 @@ export class BattleComponent implements OnInit, OnDestroy {
   playerMinDamage!: number;
   playerMaxDamage!: number;
   playerBulletsNumber = this.player.playerAmmo;
-  playerMinDamageSubscription!: Subscription;
-  playerMaxDamageSubscription!: Subscription;
-  playerHealthSubscription!: Subscription;
-  playerWeaponSubscription!: Subscription;
-  playerBulletsNumberSubscription!: Subscription;
 
   //Moster data
   monsterName!: string;
@@ -45,58 +49,42 @@ export class BattleComponent implements OnInit, OnDestroy {
   roundDamageByEnemy = 0;
   roundNumber = 0;
 
-  inBattleSubscription!: Subscription;
-  monsterMinDamageSubscription!: Subscription;
-  monsterMaxDamageSubscription!: Subscription;
-  monsterHealthSubscription!: Subscription;
-  subscription!: Subscription;
-
-  inventory!: any[];
-  inventorySubscription!: Subscription;
-
-  constructor(
-    private notifyService: NotificationService,
-    private route: ActivatedRoute,
-    private router: Router,
-    public placeService: PlaceService,
-    public playerService: PlayerService,
-    private data: BattleService
-  ) {}
+  inventory: Item[] = [];
 
   ngOnInit(): void {
-    this.inBattleSubscription = this.data.currentBattleState.subscribe(
-      (state: boolean) => (this.inBattle = state)
-    );
-    this.monsterMinDamageSubscription = this.data.currentMinDamage.subscribe(
-      monsterMinDamage => (this.monsterMinDamage = monsterMinDamage)
-    );
-    this.monsterMaxDamageSubscription = this.data.currentMaxDamage.subscribe(
-      monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage)
-    );
-    this.monsterHealthSubscription = this.data.currentMonsterHealth.subscribe(
-      enemyHealth => (this.enemyHealth = enemyHealth)
-    );
-    this.subscription = this.data.currentMessage.subscribe(
-      monsterName => (this.monsterName = monsterName)
-    );
-    this.playerHealthSubscription = this.data.currentPlayerHealth.subscribe(
-      playerHealth => (this.playerHealth = playerHealth)
-    );
-    this.playerMinDamageSubscription = this.data.currentPlayerMinDamage.subscribe(
-      playerMinDamage => (this.playerMinDamage = playerMinDamage)
-    );
-    this.playerMaxDamageSubscription = this.data.currentPlayerMaxDamage.subscribe(
-      playerMaxDamage => (this.playerMaxDamage = playerMaxDamage)
-    );
-    this.playerBulletsNumberSubscription = this.data.currentPlayerBulletsNumber.subscribe(
-      playerBulletsNumber => (this.playerBulletsNumber = playerBulletsNumber)
-    );
-    this.playerWeaponSubscription = this.data.currentWeapon.subscribe(
-      weaponName => (this.weaponName = weaponName)
-    );
-    this.inventorySubscription = this.data.currentPlayerInventory.subscribe(
-      inventory => (this.inventory = inventory)
-    );
+    this.data.currentBattleState
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((state: boolean) => (this.inBattle = state));
+    this.data.currentMinDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterMinDamage => (this.monsterMinDamage = monsterMinDamage));
+    this.data.currentMaxDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterMaxDamage => (this.monsterMaxDamage = monsterMaxDamage));
+    this.data.currentMonsterHealth
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(enemyHealth => (this.enemyHealth = enemyHealth));
+    this.data.currentMessage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(monsterName => (this.monsterName = monsterName));
+    this.data.currentPlayerHealth
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerHealth => (this.playerHealth = playerHealth));
+    this.data.currentPlayerMinDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerMinDamage => (this.playerMinDamage = playerMinDamage));
+    this.data.currentPlayerMaxDamage
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerMaxDamage => (this.playerMaxDamage = playerMaxDamage));
+    this.data.currentPlayerBulletsNumber
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(playerBulletsNumber => (this.playerBulletsNumber = playerBulletsNumber));
+    this.data.currentWeapon
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(weaponName => (this.weaponName = weaponName));
+    this.data.currentPlayerInventory
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(inventory => (this.inventory = inventory));
   }
 
   oneRound(player: Player, enemy: Enemy) {
@@ -162,19 +150,5 @@ export class BattleComponent implements OnInit, OnDestroy {
       this.data.changeMessage('Nincs');
       this.data.changeCurrentBattleState(false);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.inBattleSubscription.unsubscribe();
-    this.monsterMinDamageSubscription.unsubscribe();
-    this.monsterMaxDamageSubscription.unsubscribe();
-    this.monsterHealthSubscription.unsubscribe();
-    this.subscription.unsubscribe();
-    this.playerHealthSubscription.unsubscribe();
-    this.playerMinDamageSubscription.unsubscribe();
-    this.playerMaxDamageSubscription.unsubscribe();
-    this.playerBulletsNumberSubscription.unsubscribe();
-    this.playerWeaponSubscription.unsubscribe();
-    this.inventorySubscription.unsubscribe();
   }
 }

@@ -5,7 +5,6 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
 })
 export class MapComponent implements OnInit {
   constructor() {}

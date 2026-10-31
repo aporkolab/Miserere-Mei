@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgxDataTableComponent } from './ngx-data-table.component';
-import { AppModule } from '../../../app.module';
+import { testProviders } from '../../../../testing/test-providers';
 
 describe('NgxDataTableComponent', () => {
   let component: NgxDataTableComponent<Record<string, unknown>>;
@@ -9,7 +9,8 @@ describe('NgxDataTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [NgxDataTableComponent],
+      providers: testProviders,
     }).compileComponents();
 
     fixture =

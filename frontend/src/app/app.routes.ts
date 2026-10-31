@@ -1,6 +1,5 @@
 import { ContactComponent } from './page/contact/contact.component';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AllPlaceEditorComponent } from './page/all-place-editor/all-place-editor.component';
 import { AllPlaceViewerComponent } from './page/all-place-viewer/all-place-viewer.component';
 import { ForbiddenComponent } from './page/forbidden/forbidden.component';
@@ -13,10 +12,9 @@ import { UsersComponent } from './page/users/users.component';
 import { AuthGuardService } from './service/auth-guard.service';
 import { RoleGuardService } from './service/role-guard.service';
 import { MapComponent } from './page/map/map.component';
-import { PlayerService } from './service/player.service';
 import { PlayerComponent } from './page/battle/player/player.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
@@ -82,9 +80,3 @@ const routes: Routes = [
     component: MapComponent,
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

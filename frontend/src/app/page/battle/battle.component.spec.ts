@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BattleComponent } from './battle.component';
-import { AppModule } from '../../app.module';
+import { testProviders } from '../../../testing/test-providers';
 
 describe('BattleComponent', () => {
   let component: BattleComponent;
@@ -9,7 +9,8 @@ describe('BattleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [BattleComponent],
+      providers: testProviders,
     }).compileComponents();
 
     fixture = TestBed.createComponent(BattleComponent);
